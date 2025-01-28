@@ -13,6 +13,9 @@
           href="{{ asset('css/ADMIN-ReservationHandling3.css') }}">
     <link rel="stylesheet" []
           href="{{ asset('css/AA-Responsive-ReservationHandling.css') }}">
+    <link rel="stylesheet" []
+            href="{{ asset('css/CC-ReserHanTable.css') }}">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
 <body>
@@ -27,24 +30,33 @@
                 alt="menu-icon">
         </div>
 
-    
+        <div class="userman">
+            <div class="user_name" id="userName">
+            </div>
 
-        <div class="searchbar">
-            <input type="text" 
-                   placeholder="Search">
-            <div class="searchbtn">
-              <img src="{{ asset('assets/02-search.png') }}"
-                    class="icn srchicn" 
-                    alt="search-icon">
-              </div>
-        </div>
-
-
-            <div class="dp">
-              <img src= "{{ asset('assets/03-user.png') }}"
+            <div class="dropdown">
+                <img src= "{{ asset('assets/03-user.png') }}"
                     class="dpicn" 
                     alt="dp">
-              </div>
+              <div class="dropdown-content">
+                  <a href="profile.html">Edit Account</a>
+                  <a href="#" id="logout-link">Log Out</a>
+                        </div>
+                    </div>
+
+                    <!-- Separate Logout Form -->
+                    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+
+                    <script>
+                        // Handle the Logout functionality
+                        document.getElementById('logout-link').addEventListener('click', function (event) {
+                            event.preventDefault(); // Prevent default link behavior
+                            document.getElementById('logout-form').submit(); // Submit the hidden logout form
+                        });
+                    </script>
+            </div>
         </div>
 
     </header>
@@ -53,19 +65,19 @@
         <div class="navcontainer">
             <nav class="nav">
                 <div class="nav-upper-options">
-                <div class="nav-option option1" id="dashboard">
-                    <img src="{{ asset('assets/04-dashboard.png') }}"
-                        class="nav-img"
-                        alt="dashboard">
-                    <h3>Dashboard</h3>
-                </div>
-
-                <script>
-                    // Add event listener to redirect when clicked
-                    document.getElementById('dashboard').addEventListener('click', function() {
-                        window.location.href = "{{ route('admin.dashboard') }}";
-                    });
-                </script>
+                    <div class="nav-option option1" id="dashboard">
+                        <img src="{{ asset('assets/04-dashboard.png') }}"
+                            class="nav-img"
+                            alt="dashboard">
+                        <h3>Dashboard</h3>
+                    </div>
+    
+                    <script>
+                        // Add event listener to redirect when clicked
+                        document.getElementById('dashboard').addEventListener('click', function() {
+                            window.location.href = "{{ route('admin.dashboard') }}";
+                        });
+                    </script>
 
                     <div class="option2 nav-option" id="user-management">
                         <img src="{{ asset('assets/05-user management.png') }}"
@@ -93,113 +105,106 @@
                         <img src="{{ asset('assets/07-reports.png') }}" class="nav-img" alt="institution">
                         <h3>Reports</h3>
                     </div>
-
-                    <div class="nav-logout">
-                        <div class="nav-option logout">
-                            <img src="{{ asset('assets/12-logout.png') }}" class="nav-img" alt="logout">
-                            <h3>Logout</h3>
-                            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
-                        </div>
+          
+                    
+                    <div class="option5 nav-option" id="book-inventory">
+                        <img src="{{ asset('assets/05-user management.png') }}"
+                            class="nav-img"
+                            alt="Book Inventory">
+                        <h3>Book Inventory</h3>
                     </div>
 
                     <script>
-                        // Add an event listener for logout
-                        document.querySelector('.nav-logout').addEventListener('click', function () {
-                            event.preventDefault();
-                            // Submit the logout form
-                            document.getElementById('logout-form').submit();
+                        document.getElementById('book-inventory').addEventListener('click', function() {
+                            window.location.href = "{{ route('admin.book-inventory') }}";
                         });
-                    </script>      
+                    </script>
 
             </nav>
         </div>
 
         <div class="main">
-
-            <div class="searchbar2">
-                <input type="text" 
-                       name="" 
-                       id="" 
-                       placeholder="Search">
-                <div class="searchbtn">
-                  <img src= "02-search.png"
-                        class="icn srchicn" 
-                        alt="search-button">
-                  </div>
-            </div>
-
-
             <!--BODY CONTENT PAGE-->
-
-            <h1 class="dashboard-title">RESERVATION HANDLING</h1>
+            <div class="dashboard-title">
+                RESERVATION HANDLING
+            <div class="date-time">
+                <span id="current-date"></span>
+                <span id="current-time"></span>
+            </div>
+        </div>
             
             <div class="main-content">
-                <div class="filter-container">
-                    <div class="filter-bar">
-                        <label for="roles">Sort by:</label>
-                        <select id="roles">
-                            <option>Ascending</option>
-                            <option>Deascending</option>
-                        </select>
-                        <label for="roles">Date Reserved:</label>
-                        <select id="status">
-                            <option>Date Added</option>
-                            <option>Last 7 Days</option>
-                            <option>Last 30 Days</option>
-                            <option>This Month</option>
-                            <option>Last Month</option>
-                        </select>
-                    </div>
-
-                <div class="report-container">
-                    <div class="report-header">
-                        <h1 class="title-Header">List of Reservations</h1>
-                    </div>
-                    
-                    <div class="report-body">
-                        <div class="report-topic-heading">
-                            <div class="table-container">
-                                <table>
-                                    <thead>
-                                        <tr>
-                                            <th>#</th>
-                                            <th>Name of Student</th>
-                                            <th>Borrowed Book</th>
-                                            <th>Date of Reservation</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- Example rows -->
-                                        <tr>
-                                            <td>001</td>
-                                            <td>John Doe</td>
-                                            <td>Qualitative Reserch Book</td>
-                                            <td>01/01/2025</td>
-                                        </tr>
-                                        <tr>
-                                            <td>002</td>
-                                            <td>Jane Smith</td>
-                                            <td>Quantitative Research Book</td>
-                                            <td>02/01/2025</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div class="action-buttons">
-                                <button class="confirm">Confirm</button>
-                                <button class="cancel">Cancel</button>
-                            </div> 
+                <div class="table-container">
+                    <div class="filter-container">
+                        <div class="filter-bar">
+                            <label for="roles">Sort by:</label>
+                            <select id="roles">
+                                <option>Ascending</option>
+                                <option>Descending</option>
+                            </select>
+                            <label for="roles">Date Reserved:</label>
+                            <select id="status">
+                                <option>Date Added</option>
+                                <option>Last 7 Days</option>
+                                <option>Last 30 Days</option>
+                                <option>This Month</option>
+                                <option>Last Month</option>
+                            </select>
+                        </div>
+                        
+                        <!-- RESERVATION TABLE CONTENTS-->
+                                        
+                            <table class="reservation-table" id="bookTable">
+                                <thead>
+                                <tr>
+                                    <th>Student Name</th>
+                                    <th>Borrowed Book</th>
+                                    <th>Reservation Date</th>
+                                    <th>Book Code</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tableBody">
+                                <tr>
+                                    <td>John Doe</td>
+                                    <td>Book 1</td>
+                                    <td>01-01-2024</td>
+                                    <td>0001</td>
+                                    <td><button class="confirm-btn" onclick="confirm(this)">Confirm Reservation</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
-
             </div>    
         </div>
     </div>
 
     <script src="{{ asset('js/index.js') }}"></script>
+    <script>
+        function updateDateTime() {
+            const now = new Date();
+            
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            const date = now.toLocaleDateString('en-US', options);
+            
+            // Format the time
+            const time = now.toLocaleTimeString('en-US');
+            
+            document.getElementById('current-date').textContent = date;
+            document.getElementById('current-time').textContent = time;
+        }
+    
+        setInterval(updateDateTime, 1000);
+        window.onload = updateDateTime;
+
+        // Confirm Reservation Alert
+        function confirm(button) {
+        alert('Book Reservation Confirmed!');
+        button.disabled = true;
+    }
+    </script>
 </body>
 </html>

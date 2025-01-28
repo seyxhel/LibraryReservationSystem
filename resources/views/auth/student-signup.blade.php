@@ -34,8 +34,11 @@
         @csrf
 
             <div class="input-box">
-                <input type="text" class="input-field" name="school_id" placeholder="School ID:" required>
+                <input type="text" class="input-field" name="school_id" placeholder="School ID: (ex: 2025-00001-CM-0)" required>
                 <i class="bx bx-id-card"></i>
+                @error('school_id')
+                    <span class="error">{{ $message }}</span>
+                @enderror
             </div>
         <div class="four-forms">
 
@@ -103,6 +106,9 @@
         <div class="input-box">
             <input type="email" class="input-field" name="email" placeholder="Email:" required>
             <i class="bx bx-envelope"></i>
+            @error('email')
+                <span class="error">{{ $message }}</span>
+            @enderror
         </div>
         <p style="font-size: 12px; margin-left:20px; font-family: Arial; color: white;">
             Password must be at least 8 characters long, contain at least one number, one uppercase letter, and one special character.
@@ -112,10 +118,16 @@
             <div class="input-box">
                 <input type="password" class="input-field" name="password" placeholder="Password:" required>
                 <i class="bx bx-lock"></i>
+                @error('password')
+                    <span class="error">{{ $message }}</span>
+                @enderror
             </div>
             <div class="input-box">
                 <input type="password" class="input-field" name="password_confirmation" placeholder="Confirm Password:" required>
                 <i class="bx bx-lock"></i>
+                @error('password_confirmation')
+                    <span class="error">{{ $message }}</span>
+                @enderror
             </div>
         </div>
 
@@ -347,7 +359,9 @@
             continueButton.disabled = !(privacyCheckbox.checked && termsCheckbox.checked);
         }
 
-        privacyCheckbox.addEventListener('change', toggleContinueButton);
+        privacyCheckbox.addEventListener('change', () => {
+            continueButton.disabled = !privacyCheckbox.checked;
+        });
         termsCheckbox.addEventListener('change', toggleContinueButton);
 
         function openOverlay() {

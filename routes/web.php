@@ -3,6 +3,8 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\StudentAuthController;
+use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\BookInventoryController;
 
 // Welcome Page
 Route::get('/', function () {
@@ -119,8 +121,9 @@ Route::prefix('admin')->middleware('auth:admin')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Admin\AdminController::class, 'dashboard'])->name('admin.dashboard');
 });
 
-
-Route::get('/admin/user-management', [AdminController::class, 'userManagement'])->name('admin.user-management');
+Route::prefix('admin')->middleware('auth:admin')->group(function () {
+    Route::get('/user-management', [AdminController::class, 'userManagement'])->name('admin.user-management');
+});
 
 Route::get('/reports', function () {
     return view('admin.report-page');
@@ -134,7 +137,9 @@ Route::get('/book-inventory', function () {
     return view('admin.book-inventory');
 })->name('book-inventory.page');
 
-
+Route::middleware(['auth:admin'])->group(function () {
+    Route::get('/admin/book-inventory', [BookInventoryController::class, 'index'])->name('admin.book-inventory');
+});
 
 
 

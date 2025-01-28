@@ -67,7 +67,7 @@ class StudentAuthController extends Controller
     {
         // Validate the signup form inputs
         $validatedData = $request->validate([
-            'school_id' => 'required|unique:Students,School_ID',
+            'school_id' => ['required', 'unique:Students,School_ID', 'regex:/^20[0-9]{2}-[0-9]{5}-CM-0$/'], // Enforces correct format
             'first_name' => 'required|string|max:100',
             'last_name' => 'required|string|max:100',
             'middle_name' => 'nullable|string|max:100',
@@ -76,7 +76,16 @@ class StudentAuthController extends Controller
             'program_id' => 'required|exists:Programs,Program_ID',
             'contact_number' => 'required|regex:/^09[0-9]{9}$/',
             'email' => 'required|email|unique:Students,Email',
-            'password' => 'required|string|min:8|confirmed',
+            'password' => [
+                'required',
+                'string',
+                'min:8',                        // Minimum 8 characters
+                'regex:/[A-Z]/',                // At least one uppercase letter
+                'regex:/[a-z]/',                // At least one lowercase letter
+                'regex:/[0-9]/',                // At least one digit
+                'regex:/[@$!%*?&#]/',           // At least one special character
+                'confirmed',                    // Matches password_confirmation
+            ],
         ]);
 
         try {

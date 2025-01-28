@@ -349,3 +349,7 @@ header {
   color: white;
   border-radius: 4px;
 }
+
+.dropdown:hover .dpicn {
+  background-color: #531616;
+}

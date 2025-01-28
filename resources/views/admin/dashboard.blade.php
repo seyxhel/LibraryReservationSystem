@@ -27,24 +27,29 @@
                 alt="menu-icon">
         </div>
 
-    
-
-        <div class="searchbar">
-            <input type="text" 
-                   placeholder="Search">
-            <div class="searchbtn">
-              <img src="{{ asset('assets/02-search.png') }}"
-                    class="icn srchicn" 
-                    alt="search-icon">
-              </div>
-        </div>
-
-
-            <div class="dp">
-              <img src= "{{ asset('assets/03-user.png') }}"
+        <div class="dropdown">
+                <img src= "{{ asset('assets/03-user.png') }}"
                     class="dpicn" 
                     alt="dp">
-              </div>
+              <div class="dropdown-content">
+                  <a href="profile.html">Edit Account</a>
+                  <a href="#" id="logout-link">Log Out</a>
+                        </div>
+                    </div>
+
+                    <!-- Separate Logout Form -->
+                    <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
+                        @csrf
+                    </form>
+
+                    <script>
+                        // Handle the Logout functionality
+                        document.getElementById('logout-link').addEventListener('click', function (event) {
+                            event.preventDefault(); // Prevent default link behavior
+                            document.getElementById('logout-form').submit(); // Submit the hidden logout form
+                        });
+                    </script>
+            </div>
         </div>
 
     </header>
@@ -83,22 +88,16 @@
                         <h3>Reports</h3>
                     </div>
  
-                    <div class="nav-logout">
-                        <div class="nav-option logout">
-                            <img src="{{ asset('assets/12-logout.png') }}" class="nav-img" alt="logout">
-                            <h3>Logout</h3>
-                            <form id="logout-form" action="{{ route('admin.logout') }}" method="POST" style="display: none;">
-                                @csrf
-                            </form>
-                        </div>
+                    <div class="option5 nav-option" id="book-inventory">
+                        <img src="{{ asset('assets/13-inventory.png') }}"
+                            class="nav-img"
+                            alt="Book Inventory">
+                        <h3>Book Inventory</h3>
                     </div>
 
                     <script>
-                        // Add an event listener for logout
-                        document.querySelector('.nav-logout').addEventListener('click', function () {
-                            event.preventDefault();
-                            // Submit the logout form
-                            document.getElementById('logout-form').submit();
+                        document.getElementById('book-inventory').addEventListener('click', function() {
+                            window.location.href = "{{ route('admin.book-inventory') }}";
                         });
                     </script>
             </nav>
