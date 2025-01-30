@@ -2,43 +2,41 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
 class Admin extends Authenticatable
 {
-    use Notifiable;
+    use HasFactory, Notifiable;
 
-    // Specify the table name if it differs from "admins"
     protected $table = 'Admins';
-
-    // Specify the primary key if it differs from "id"
     protected $primaryKey = 'Admin_ID';
-
-    // Disable timestamps if not present in the table
     public $timestamps = false;
 
     protected $fillable = [
-        'Email',
-        'School_ID',
-        'LastName',
-        'FirstName',
-        'MiddleName',
-        'Suffix',
-        'Gender',
-        'ContactNumber',
-        'Password',
-        'Status',
-        'AccountCreated',
-        'UpdatedAt',
+        'Email', 'School_ID', 'LastName', 'FirstName', 'MiddleName',
+        'Suffix', 'Gender', 'ContactNumber', 'Password', 'Status', 'AccountCreated'
     ];
 
-    // Specify the hidden attributes
-    protected $hidden = ['Password'];
+    protected $hidden = [
+        'Password',
+    ];
 
-    // Define the authentication password column
+    /**
+     * Override default authentication column.
+     */
+    public function getAuthIdentifierName()
+    {
+        return 'Admin_ID'; // Change this if your auth column is different
+    }
+
+    /**
+     * Override default password field.
+     */
     public function getAuthPassword()
     {
         return $this->Password;
     }
 }
+

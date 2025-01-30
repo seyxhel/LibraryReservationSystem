@@ -5,6 +5,8 @@ use App\Http\Controllers\Admin\AdminAuthController;
 use App\Http\Controllers\StudentAuthController;
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\BookInventoryController;
+use App\Models\Admin;
+use Illuminate\Http\Request;
 
 // Welcome Page
 Route::get('/', function () {
@@ -141,11 +143,25 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('/admin/book-inventory', [BookInventoryController::class, 'index'])->name('admin.book-inventory');
 });
 
+Route::middleware('auth:admin')->prefix('admin')->group(function () {
+    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::get('/user-management', [AdminController::class, 'userManagement'])->name('admin.user-management');
+    Route::post('/add-admin', [AdminController::class, 'addAdmin'])->name('admin.add');
+    Route::get('/admin/get-admins', [AdminController::class, 'getAdmins'])->name('admin.getAdmins');
+    Route::post('/admin/update-status/{id}', [AdminController::class, 'updateStatus']);
+});
 
+Route::middleware(['auth:admin'])->group(function () {
+    // ... your existing routes ...
+    
+    Route::get('/admin/profile', [AdminController::class, 'profile'])->name('admin.profile');
+    Route::put('/admin/profile/update', [AdminController::class, 'updateProfile'])->name('admin.profile.update');
+    Route::get('/admin/profile/data', [AdminController::class, 'getAdminProfile'])->name('admin.profile.data');
+    Route::put('/admin/profile/password', [AdminController::class, 'updatePassword'])->name('admin.profile.password.update');
+});
 
+Route::get('/get-students-list', [AdminController::class, 'getStudentsList'])->name('admin.students.list');
 
+Route::get('/get-admins-list', [AdminController::class, 'getAdminsList'])->name('admin.admins.list');
 
-
-
-
-
+Route::get('/get-admin-details/{schoolId}', [AdminController::class, 'getAdminDetails'])->name('admin.details');

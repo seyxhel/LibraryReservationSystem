@@ -39,7 +39,7 @@
                     class="dpicn" 
                     alt="dp">
               <div class="dropdown-content">
-                  <a href="profile.html">Edit Account</a>
+                  <a href="{{ route('admin.profile') }}">Edit Account</a>
                   <a href="#" id="logout-link">Log Out</a>
                         </div>
                     </div>
@@ -173,32 +173,16 @@
             </div>
             <form id="addBookForm">
                 <div class="mb-4">
-                    <label for="bookLabel" class="block text-sm font-medium">Book Label</label>
-                    <input type="text" id="bookLabel" class="text-field mt-1 block w-full rounded-md shadow-sm">
-                </div>
-                <div class="mb-4">
                     <label for="bookNumber" class="block text-sm font-medium">Book Number</label>
                     <input type="text" id="bookNumber" class="text-field mt-1 block w-full rounded-md shadow-sm" maxlength="4" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
-                </div>
-                <div class="mb-4">
-                    <label for="bookCode" class="block text-sm font-medium">Book Code</label>
-                    <input type="text" id="bookCode" class="text-field mt-1 block w-full rounded-md shadow-sm" maxlength="6" pattern="[A-Za-z0-9]+" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase()" required>
                 </div>
                 <div class="mb-4">
                     <label for="researchTitle" class="block text-sm font-medium">Research Title</label>
                     <input type="text" id="researchTitle" class="text-field mt-1 block w-full rounded-md shadow-sm">
                 </div>
                 <div class="mb-4">
-                    <label for="researcher" class="block text-sm font-medium">Researcher</label>
+                    <label for="researcher" class="block text-sm font-medium">Researcher/s</label>
                     <input type="text" id="researcher" class="text-field mt-1 block w-full rounded-md shadow-sm">
-                </div>
-                <div class="mb-4">
-                    <label for="abstract" class="block text-sm font-medium">Abstract</label>
-                    <textarea id="abstract" class="text-field mt-1 block w-full rounded-md shadow-sm"></textarea>
-                </div>
-                <div class="mb-4">
-                    <label for="heldBy" class="block text-sm font-medium">Held By</label>
-                    <input type="text" id="heldBy" class="text-field mt-1 block w-full rounded-md shadow-sm">
                 </div>
                 <div class="mb-4">
                     <label for="location" class="block text-sm font-medium">Location</label>
@@ -210,6 +194,10 @@
                         <option>Bookshelf 4</option>
                         <option>Bookshelf 5</option>
                     </select>
+                </div>
+                <div class="mb-4">
+                    <label for="bookCode" class="block text-sm font-medium">Book Code</label>
+                    <input type="text" id="bookCode" class="text-field mt-1 block w-full rounded-md shadow-sm" maxlength="6" pattern="[A-Za-z0-9]+" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase()" required>
                 </div>
                 <div class="mb-4">
                     <label for="category" class="block text-sm font-medium">Category</label>
@@ -232,6 +220,10 @@
                         <option>Grounded Theory</option>
                     </select>
                 </div>
+                <div class="mb-4">
+                    <label for="abstract" class="block text-sm font-medium">Abstract</label>
+                    <textarea id="abstract" class="text-field mt-1 block w-full rounded-md shadow-sm"></textarea>
+                </div>
                 <div class="flex justify-end space-x-4">
                     <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-md" onclick="closeModal(addBookModal)">Cancel</button>
                     <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-md">Save Book</button>
@@ -249,32 +241,16 @@
         </div>
             <form id="editBookForm">
                 <div class="mb-4">
-                    <label for="bookLabel" class="block text-sm font-medium">Book Label</label>
-                    <input type="text" id="editBookLabel" class="text-field mt-1 block w-full rounded-md shadow-sm">
-                </div>
-                <div class="mb-4">
                     <label for="bookNumber" class="block text-sm font-medium">Book Number</label>
                     <input type="number" id="editBookNumber" class="text-field mt-1 block w-full rounded-md shadow-sm bg-gray-100 text-gray-500 cursor-not-allowed" readonly>
-                </div>
-                <div class="mb-4">
-                    <label for="bookCode" class="block text-sm font-medium">Book Code</label>
-                    <input type="text" id="editBookCode" class="text-field mt-1 block w-full rounded-md shadow-sm bg-gray-100 text-gray-500 cursor-not-allowed" readonly>
                 </div>
                 <div class="mb-4">
                     <label for="researchTitle" class="block text-sm font-medium">Research Title</label>
                     <input type="text" id="editBookTitle" class="text-field mt-1 block w-full rounded-md shadow-sm">
                 </div>
                 <div class="mb-4">
-                    <label for="researcher" class="block text-sm font-medium">Researcher</label>
+                    <label for="researcher" class="block text-sm font-medium">Researcher/s</label>
                     <input type="text" id="editBookResearcher" class="text-field mt-1 block w-full rounded-md shadow-sm">
-                </div>
-                <div class="mb-4">
-                    <label for="abstract" class="block text-sm font-medium">Abstract</label>
-                    <textarea id="editBookAbstract" class="text-field mt-1 block w-full rounded-md shadow-sm"></textarea>
-                </div>
-                <div class="mb-4">
-                    <label for="heldBy" class="block text-sm font-medium">Held By</label>
-                    <input type="text" id="editBookHeldBy" class="text-field mt-1 block w-full rounded-md shadow-sm">
                 </div>
                 <div class="mb-4">
                     <label for="location" class="block text-sm font-medium">Location</label>
@@ -285,6 +261,18 @@
                         <option>Bookshelf 3</option>
                         <option>Bookshelf 4</option>
                         <option>Bookshelf 5</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label for="bookCode" class="block text-sm font-medium">Book Code</label>
+                    <input type="text" id="editBookCode" class="text-field mt-1 block w-full rounded-md shadow-sm bg-gray-100 text-gray-500 cursor-not-allowed" readonly>
+                </div>
+                <div class="mb-4">
+                    <label for="status" class="block text-sm font-medium">Status</label>
+                    <select id="editBookStatus" class="text-field mt-1 block w-full rounded-md shadow-sm">
+                        <option disabled selected>Select Status</option>
+                        <option>ACTIVE</option>
+                        <option>INACTIVE</option>
                     </select>
                 </div>
                 <div class="mb-4">
@@ -309,22 +297,63 @@
                     </select>
                 </div>
                 <div class="mb-4">
-                    <label for="status" class="block text-sm font-medium">Status</label>
-                    <select id="editBookStatus" class="text-field mt-1 block w-full rounded-md shadow-sm">
-                        <option disabled selected>Select Status</option>
-                        <option>ACTIVE</option>
-                        <option>INACTIVE</option>
-                    </select>
+                    <label for="abstract" class="block text-sm font-medium">Abstract</label>
+                    <textarea id="editBookAbstract" class="text-field mt-1 block w-full rounded-md shadow-sm"></textarea>
                 </div>
                 <div class="flex justify-end space-x-4 border-t pt-4 mt-6">
                     <button type="button" class="bg-gray-200 hover:bg-gray-300 text-gray-700 px-4 py-2 rounded-md" onclick="closeModal('editBookModal')">Cancel</button>
-                    <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-md">Save Book</button>
+                    <button type="submit" class="bg-indigo-500 hover:bg-indigo-600 text-white px-4 py-2 rounded-md">Update</button>
                 </div>
             </form>
         </div>
     </div>
 
-    <!--Nav Bar Script-->
+    <!-- View Book Modal -->
+    <div id="viewBookModal" class="modal-background flex justify-center items-center h-screen" style="display: none;">
+        <div class="modal-content bg-white p-6 rounded-lg shadow-lg max-w-2xl w-full">
+            <div class="flex justify-between items-center mb-4 border-b pb-2">
+                <h2 class="text-xl font-semibold">BOOK INFORMATION</h2>
+                <button class="text-gray-500 hover:text-gray-700 text-3xl p-2" onclick="closeModal('viewBookModal')">&times;</button>
+            </div>
+            <div class="space-y-4">
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-500">Book Number</p>
+                    <p class="mt-1 text-base" id="viewBookNumber"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-500">Research Title</p>
+                    <p class="mt-1 text-base" id="viewResearchTitle"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-500">Researcher/s</p>
+                    <p class="mt-1 text-base" id="viewResearcher"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-500">Location</p>
+                    <p class="mt-1 text-base" id="viewLocation"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-500">Book Code</p>
+                    <p class="mt-1 text-base" id="viewBookCode"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-500">Category</p>
+                    <p class="mt-1 text-base" id="viewCategory"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-500">Abstract</p>
+                    <p class="mt-1 text-base" id="viewAbstract"></p>
+                </div>
+                <div class="mb-4">
+                    <p class="text-sm font-medium text-gray-500">Status</p>
+                    <p class="mt-1 text-base" id="viewStatus"></p>
+                </div>
+            </div>
+            <div class="flex justify-center mt-6 pt-4 border-t">
+                <button type="button" class="bg-green-200 hover:bg-green-300 text-white-700 px-4 py-2 rounded-md" onclick="closeModal('viewBookModal')">OKAY</button>
+            </div>
+        </div>
+    </div>
     <script src="{{ asset('js/index.js') }}"></script>
     <script>
 
@@ -335,10 +364,10 @@
         const addBookModal = document.getElementById('addBookModal');
         const editBookModal = document.getElementById('editBookModal');
         const addBookBtn = document.getElementById('addBookBtn');
-        loadTableData();
+        //loadTableData();
 
         // Function to load table data
-        function loadTableData() {
+        /*function loadTableData() {
             const tableData = JSON.parse(localStorage.getItem('bookTableData')) || [];
             const tableBody = document.getElementById('tableBody');
             
@@ -346,7 +375,6 @@
                 const newRow = document.createElement('tr');
                 newRow.innerHTML = `
                     <td>${book.bookNumber}</td>
-                    <td>${book.bookLabel}</td>
                     <td>${book.researcher}</td>
                     <td>${book.location}</td>
                     <td>${book.bookCode}</td>
@@ -360,7 +388,7 @@
                 `;
                 tableBody.appendChild(newRow);
             });
-        }
+        }*/
 
         // Open modal function
         function openModal(modal) {
@@ -372,7 +400,7 @@
             modal.style.display = "none"; // Hide the modal
         }
 
-        // Add Book Modal Functionality
+        // ------------------ ADD BOOK FUNCTIONALITY ------------------
         addBookBtn.addEventListener('click', () => openModal(addBookModal));
 
         // Close buttons for both modals
@@ -385,8 +413,9 @@
         document.querySelectorAll('[onclick^="closeModal"]').forEach(button => {
             button.addEventListener('click', () => closeModal(editBookModal));
         });
+        
 
-        // Add Book Form Submission
+        // ------------------ ADD BOOK FORM ------------------
         const addBookForm = document.getElementById('addBookForm');
         addBookForm.addEventListener('submit', function(e) {
             e.preventDefault();
@@ -395,27 +424,28 @@
             const bookDetails = {
                 bookNumber: document.getElementById('bookNumber').value,
                 bookCode: document.getElementById('bookCode').value,
-                bookLabel: document.getElementById('bookLabel').value,
                 researchTitle: document.getElementById('researchTitle').value,
                 researcher: document.getElementById('researcher').value,
                 location: document.getElementById('location').value,
                 category: document.getElementById('category').value,
                 abstract: document.getElementById('abstract').value,
-                heldBy: document.getElementById('heldBy').value,
                 status: 'ACTIVE'
             };
 
             // Save to localStorage
-            const existingData = JSON.parse(localStorage.getItem('bookTableData')) || [];
+            /*const existingData = JSON.parse(localStorage.getItem('bookTableData')) || [];
             existingData.push(bookDetails);
-            localStorage.setItem('bookTableData', JSON.stringify(existingData));
+            localStorage.setItem('bookTableData', JSON.stringify(existingData));*/
 
             // Create table row
             const tableBody = document.getElementById('tableBody');
             const newRow = document.createElement('tr');
+            newRow.dataset.researchTitle = bookDetails.researchTitle;
+            newRow.dataset.abstract = bookDetails.abstract;
+
             newRow.innerHTML = `
                 <td>${bookDetails.bookNumber}</td>
-                <td>${bookDetails.bookLabel}</td>
+                <td>${bookDetails.researchTitle}</td>
                 <td>${bookDetails.researcher}</td>
                 <td>${bookDetails.location}</td>
                 <td>${bookDetails.bookCode}</td>
@@ -438,10 +468,10 @@
             addBookForm.reset();
         });
 
-        // Edit Book Functionality
+        // ------------------ EDIT BOOK FUNCTIONALITY ------------------
         function editBook(button) {
             const row = button.closest('tr'); // Find the row containing the book
-            const cells = row.getElementsByTagName('td');
+            const cells = row.cells;
 
             // Get the modal
             const editBookModal = document.getElementById('editBookModal');
@@ -452,15 +482,14 @@
             const bookData = existingData.find(book => book.bookNumber === bookNumber);
 
             // Populate all form fields with existing data
-            document.getElementById('editBookNumber').value = cells[0].textContent;    // Book Number
-            document.getElementById('editBookCode').value = cells[4].textContent;      // Book Code
-            document.getElementById('bookLabel').value = cells[1].textContent;     // Book Label
-            document.getElementById('editBookResearcher').value = cells[2].textContent; // Researcher
-            document.getElementById('editLocation').value = cells[3].textContent;      // Location
-            document.getElementById('editBookStatus').value = cells[5].textContent;    // Status
-            document.getElementById('editBookCategory').value = cells[6].textContent;  // Category
-            document.getElementById('editBookAbstract').value = cells[7]?.textContent || ''; // Abstract
-            document.getElementById('editBookHeldBy').value = cells[8]?.textContent || '';   // HeldBy
+            document.getElementById('editBookNumber').value = cells[0].textContent;
+            document.getElementById('editBookTitle').value = row.dataset.researchTitle;
+            document.getElementById('editBookResearcher').value = cells[2].textContent;
+            document.getElementById('editBookCode').value = cells[4].textContent;
+            document.getElementById('editLocation').value = cells[3].textContent;
+            document.getElementById('editBookCategory').value = cells[6].textContent;
+            document.getElementById('editBookStatus').value = cells[5].textContent;
+            document.getElementById('editBookAbstract').value = row.dataset.abstract;
 
             // Close Modal Function
             function closeModal(modal) {
@@ -474,27 +503,47 @@
             editBookModal.dataset.editingRow = row.rowIndex - 1; // Account for header row
         }
 
-        // Edit Book Form Submission
+        // ------------------ EDIT BOOK FORM ------------------
         const editBookForm = document.getElementById('editBookForm');
         editBookForm.addEventListener('submit', function (e) {
             e.preventDefault();
 
             // Get the modal and the row being edited
-            const editBookModal = document.getElementById('editBookModal');
             const rowIndex = parseInt(editBookModal.dataset.editingRow);
             const tableBody = document.getElementById('tableBody');
             const row = tableBody.rows[rowIndex];
 
-            // Update row cells with new values
-            row.cells[1].textContent = document.getElementById('editBookLabel').value;
-            row.cells[2].textContent = document.getElementById('editResearchTitle').value;
-            row.cells[3].textContent = document.getElementById('editBookResearcher').value;
-            row.cells[4].textContent = document.getElementById('editLocation').value;
-            row.cells[5].textContent = document.getElementById('editBookCode').value;
-            row.cells[6].textContent = document.getElementById('editBookStatus').value;
-            row.cells[7].textContent = document.getElementById('editBookCategory').value;
-            row.cells[8].textContent = document.getElementById('editBookAbstract').value;
-            row.cells[9].textContent = document.getElementById('editBookHeldBy').value;
+            // Get updated values
+            const updatedBook = {
+                bookNumber: document.getElementById('editBookNumber').value,
+                researchTitle: document.getElementById('editBookTitle').value,
+                researcher: document.getElementById('editBookResearcher').value,
+                location: document.getElementById('editLocation').value,
+                bookCode: document.getElementById('editBookCode').value,
+                status: document.getElementById('editBookStatus').value,
+                category: document.getElementById('editBookCategory').value,
+                abstract: document.getElementById('editBookAbstract').value
+            };
+            
+            // Update row data attributes
+            row.dataset.researchTitle = updatedBook.researchTitle;
+            row.dataset.abstract = updatedBook.abstract;
+            
+            // Update row content
+            row.innerHTML = `
+                <td>${updatedBook.bookNumber}</td>
+                <td>${updatedBook.researchTitle}</td>
+                <td>${updatedBook.researcher}</td>
+                <td>${updatedBook.location}</td>
+                <td>${updatedBook.bookCode}</td>
+                <td>${updatedBook.status}</td>
+                <td>${updatedBook.category}</td>
+                <td>
+                    <button class="view-btn" onclick="viewBook(this)">View</button>
+                    <button class="edit-btn" onclick="editBook(this)">Edit</button>
+                    <button class="delete-btn" onclick="deleteBook(this)">Delete</button>
+                </td>
+            `;
 
             // Close modal
             closeModal(editBookModal);
@@ -502,6 +551,40 @@
             // Reset form
             editBookForm.reset();
         });
+
+        // ------------------ VIEW BOOK FUNCTIONALITY ------------------
+        window.viewBook = function(button) {
+            const viewBookModal = document.getElementById('viewBookModal');
+            const row = button.closest('tr');
+            const cells = row.cells;
+
+            // Populate modal with book data
+            document.getElementById('viewBookNumber').textContent = cells[0].textContent;
+            document.getElementById('viewResearchTitle').textContent = cells[1].textContent;
+            document.getElementById('viewResearcher').textContent = cells[2].textContent;
+            document.getElementById('viewLocation').textContent = cells[3].textContent;
+            document.getElementById('viewBookCode').textContent = cells[4].textContent;
+            document.getElementById('viewStatus').textContent = cells[5].textContent;
+            document.getElementById('viewCategory').textContent = cells[6].textContent;
+            
+            // Get data from dataset attributes
+            document.getElementById('viewAbstract').textContent = row.dataset.abstract || 'N/A';
+
+            // Open modal
+            openModal(viewBookModal);
+        }
+
+        // Replace existing placeholder viewBook function
+        function viewBook(button) {
+            window.viewBook(button);
+        }
+
+        // Event listeners for buttons
+        document.querySelectorAll('[onclick^="closeModal"]').forEach(button => {
+            button.addEventListener('click', () => closeModal(viewBookModal));
+        });
+
+        // ------------------ OTHERS ------------------
 
         // Expose functions globally if needed
         window.editBook = editBook;

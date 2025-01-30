@@ -38,7 +38,7 @@
     padding: 0 30px;
     background-color: var(--background-color1);
     position: fixed;
-    z-index: 100;
+    z-index: 1000;
     box-shadow: 1px 1px 15px rgba(161, 182, 253, 0.825);
     display: flex;
     justify-content: space-between;
@@ -122,12 +122,11 @@
     justify-content: center;
     overflow: hidden;
   }
-  .main-container {
+  .main-container { /*bwiset toh binigyan ako ng sakit ng ulo ETO PALA CULPRIT SA HEADER ISSUE*/
     display: flex;
     width: 100vw;
     position: relative;
-    top: 70px;
-    z-index: 1;
+    top: 70px; 
   }
   .dpicn {
     height: 42px;
@@ -139,17 +138,21 @@
     overflow-y: scroll;
     overflow-x: hidden;
     padding: 40px 30px 30px 30px;
+    position: relative;
   }
 
-  .main-content {
+   .main-content {
     flex: 1;
     padding: 20px;
     background-color: white;
     border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    outline: 1px solid #ccc;
     margin: 20px;
+    max-height: 500px; /* Adjust height as needed */
+    overflow-y: auto;
+    overflow-x: hidden;
   }
-  
+
   .main::-webkit-scrollbar-thumb {
     background-image: 
           linear-gradient(to bottom, rgb(0, 0, 85), rgb(0, 0, 50));
@@ -161,6 +164,25 @@
     background-color: #9e9e9eb2;
   }
   
+  /* Scrollbar styling */
+  .main-content::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  .main-content::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  .main-content::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+  }
+
+  .main-content::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }
+
   .nav {
     min-height: 100vh;
     width: 250px;
@@ -253,7 +275,16 @@
     display: flex;
     color: #961c1e;
     margin-left: 10px;
-}
+    align-items: center; /* Align items vertically */
+    justify-content: space-between; /* Align date/time to the right */
+  }
+
+  .date-time { 
+    font-size: 1.5rem;
+    margin-right: 20px;
+    color: #161414;
+  }
+
   /*FILTER BOX FOR USER MGMT ONLY*/
   .filter-container{
     display: flex;
@@ -269,7 +300,7 @@
     justify-content: space-around;
     display: flex;
     gap: 10px;
-}
+  }
 
   .filter-bar select {
     padding: 5px;
@@ -317,7 +348,6 @@
     margin: 10px auto 0px;
     background-color: #ffffff;
     border-radius: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     padding: 0px 15px 0px 0px;
   }
   .report-header {
@@ -327,7 +357,7 @@
     align-items: center;
     justify-content: space-between;
     padding: 20px 20px 10px 20px;
-    border-bottom: 2px solid #961c1e;
+    border-bottom: 2px solid #db8e29;
   }
   
   /*table inside container*/
@@ -350,7 +380,7 @@
   .title-Header{
     font-size: 30px;
     font-weight: 600;
-    color: #961c1e;
+    color: #1c2069;
   }
   
   .add {
@@ -443,3 +473,68 @@
     background-color: #dc3545;
     color: white;
 }
+
+/* Flex container to align .user_name and .dropdown horizontally */
+.userman {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end; /* Push everything to the right */
+  gap: 3px; /* Space between user_name and dropdown */
+  margin-right: 20px; /* Add space from the right edge */
+}
+
+.user_name {
+  margin-right: 20px; /* Space on the right side */
+  font-size: 14px; /* Adjust font size */
+  font-weight: bold; /* Make it stand out */
+  text-align: right;
+}
+
+.dropdown {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.dropbtn {
+  background-color: #ffffff;
+  color: rgb(126, 0, 0);
+  padding: 5px 10px;
+  font-size: 12px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.dropdown-content {
+  display: none; /* Hidden by default */
+  position: absolute; /* Positioned relative to the parent */
+  right: 0; /* Align to the right side of the dropdown */
+  top: 100%; /* Place directly below the button */
+  background-color: white;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  z-index: 3;
+  border-radius: 4px;
+  text-align: left;
+}
+
+.dropdown-content a { 
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-content {
+  display: block; /* Make dropdown content visible on hover */
+}
+
+.dropdown:hover .dpicn {
+  background-color: #531616;
+}
+

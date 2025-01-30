@@ -39,7 +39,7 @@
                     class="dpicn" 
                     alt="dp">
               <div class="dropdown-content">
-                  <a href="profile.html">Edit Account</a>
+                  <a href="{{ route('admin.profile') }}">Edit Account</a>
                   <a href="#" id="logout-link">Log Out</a>
                         </div>
                     </div>
