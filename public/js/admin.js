@@ -15,7 +15,7 @@ window.onload = updateDateTime;
 
 // Modal handling functions
 function openModal(modalId) {
-    const modal = typeof modalId === 'string' ? document.getElementById(modalId) : modalId;
+    const modal = document.getElementById(modalId);
     if (modal) {
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
@@ -23,65 +23,12 @@ function openModal(modalId) {
 }
 
 function closeModal(modalId) {
-    const modal = typeof modalId === 'string' ? document.getElementById(modalId) : modalId;
+    const modal = document.getElementById(modalId);
     if (modal) {
         modal.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
 }
-
-// Function to initialize the admin table with data
-async function initializeAdminTable() {
-    try {
-        const response = await fetch('/admin/get-admins', {
-            headers: {
-                'Accept': 'application/json',
-                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
-            }
-        });
-
-        console.log("Response status:", response.status);
-        console.log("Response headers:", response.headers);
-
-        if (!response.ok) {
-            const errorText = await response.text(); // Log raw response text
-            throw new Error(`Failed to fetch admin data: ${errorText}`);
-        }
-
-        const admins = await response.json();
-        console.log("Fetched admins:", admins);
-
-        const tableBody = document.getElementById('tableBody');
-        tableBody.innerHTML = '';
-
-        admins.forEach(admin => {
-            const row = document.createElement('tr');
-            row.dataset.email = admin.Email;
-            row.dataset.firstName = admin.FirstName;
-            row.dataset.middleName = admin.MiddleName || '';
-            row.dataset.surname = admin.LastName;
-            row.dataset.suffix = admin.Suffix || '';
-            row.dataset.gender = admin.Gender;
-            row.dataset.contactNum = admin.ContactNumber;
-            
-            row.innerHTML = `
-                <td>${admin.School_ID}</td>
-                <td>${admin.Email}</td>
-                <td>${admin.FirstName} ${admin.LastName}</td>
-                <td>${createStatusDropdown(admin.Status)}</td>
-                <td>
-                    <button class="view-btn" onclick="viewAdmin(this)">View</button>
-                </td>
-            `;
-
-            tableBody.appendChild(row);
-        });
-    } catch (error) {
-        console.error('Error loading admin data:', error);
-        alert('Failed to load admin data. Please refresh the page.');
-    }
-}
-
 
 // Status dropdown creation function
 function createStatusDropdown(status) {
@@ -94,13 +41,106 @@ function createStatusDropdown(status) {
     `;
 }
 
+// Function to load admin data
+async function loadAdminTable() {
+    const tableBody = document.getElementById('tableBody');
+    if (!tableBody) {
+        console.error('Table body element not found');
+        return;
+    }
+    
+    try {
+        console.log('Fetching admin data...');
+        const response = await fetch('/admin/get-admins', {
+            headers: {
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+            }
+        });
+        console.log('Response status:', response.status);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            console.error('Response not ok:', errorText);
+            throw new Error(`Failed to fetch admin data: ${errorText}`);
+        }
+
+        const admins = await response.json();
+        console.log('Received admin data:', admins);
+        
+        tableBody.innerHTML = '';
+        admins.forEach(admin => {
+            const row = document.createElement('tr');
+            row.dataset.email = admin.Email || '';
+            row.dataset.firstName = admin.FirstName || '';
+            row.dataset.middleName = admin.MiddleName || '';
+            row.dataset.surname = admin.LastName || '';
+            row.dataset.suffix = admin.Suffix || '';
+            row.dataset.gender = admin.Gender || '';
+            row.dataset.contactNum = admin.ContactNumber || '';
+            
+            row.innerHTML = `
+                <td>${admin.School_ID || ''}</td>
+                <td>${admin.Email || ''}</td>
+                <td>${(admin.FirstName || '') + ' ' + (admin.LastName || '')}</td>
+                <td>${createStatusDropdown(admin.Status || 'INACTIVE')}</td>
+                <td>
+                    <button class="view-btn" onclick="viewAdmin(this)">View</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error in loadAdminTable:', error);
+        tableBody.innerHTML = `
+            <tr>
+                <td colspan="5" class="text-center text-red-500 py-4">
+                    Error loading admin data. Please check console and refresh the page.
+                </td>
+            </tr>
+        `;
+    }
+}
+
+// Function to load student data
+async function loadStudentData() {
+    try {
+        const response = await fetch('/get-students-list');
+        if (!response.ok) throw new Error('Failed to fetch students');
+
+        const students = await response.json();
+        const tableBody = document.getElementById('studentTableBody');
+        tableBody.innerHTML = '';
+
+        students.forEach(student => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${student.School_ID}</td>
+                <td>${student.Email}</td>
+                <td>${student.Name}</td>
+                <td>
+                    <button class="view-btn" onclick="viewStudent('${student.School_ID}')">View Student</button>
+                </td>
+            `;
+            tableBody.appendChild(row);
+        });
+    } catch (error) {
+        console.error('Error loading student data:', error);
+    }
+}
+
 // Admin status update function
 async function updateAdminStatus(select) {
-    const newStatus = select.value;
-    const row = select.closest('tr');
-    const schoolId = row.cells[0].textContent;
-
     try {
+        const newStatus = select.value;
+        const row = select.closest('tr');
+        const schoolId = row.cells[0].textContent;
+
+        // Show loading state
+        const originalColor = select.style.backgroundColor;
+        select.style.backgroundColor = '#ccc';
+        select.disabled = true;
+
         const response = await fetch(`/admin/update-status/${schoolId}`, {
             method: 'POST',
             headers: {
@@ -115,22 +155,26 @@ async function updateAdminStatus(select) {
             throw new Error('Failed to update status');
         }
 
+        const data = await response.json();
+
+        // Update dropdown styling
         select.classList.remove('active', 'inactive');
         select.classList.add(newStatus.toLowerCase() === 'active' ? 'active' : 'inactive');
 
-        const viewModal = document.getElementById('viewAdminModal');
-        if (viewModal && viewModal.style.display === 'flex') {
-            const statusElement = document.getElementById('viewStatus');
-            if (statusElement) {
-                statusElement.textContent = newStatus;
-                statusElement.className = `mt-1 text-base ${newStatus === 'ACTIVE' ? 'text-green-500' : 'text-red-500'}`;
-            }
-        }
+        // Update view modal status if it's open
+        updateViewModalStatus(newStatus);
+
+        // Show success message
+        showNotification('Status updated successfully', 'success');
+
     } catch (error) {
         console.error('Error updating status:', error);
-        alert('Failed to update status. Please try again.');
-        // Revert the select value if the update failed
         select.value = select.value === 'ACTIVE' ? 'INACTIVE' : 'ACTIVE';
+        showNotification('Failed to update status. Please try again.', 'error');
+    } finally {
+        // Reset loading state
+        select.disabled = false;
+        select.style.backgroundColor = '';
     }
 }
 
@@ -139,8 +183,7 @@ window.viewAdmin = function(button) {
     try {
         const row = button.closest('tr');
         if (!row) {
-            console.error('Could not find parent row');
-            return;
+            throw new Error('Could not find parent row');
         }
 
         const fields = {
@@ -159,7 +202,6 @@ window.viewAdmin = function(button) {
             const element = document.getElementById(id);
             if (element) {
                 element.textContent = value;
-                // Add appropriate styling for status if it's the status field
                 if (id === 'viewStatus') {
                     element.className = `mt-1 text-base ${value === 'ACTIVE' ? 'text-green-500' : 'text-red-500'}`;
                 }
@@ -173,67 +215,142 @@ window.viewAdmin = function(button) {
     }
 };
 
+// View student function
+window.viewStudent = async function(schoolID) {
+    try {
+        const response = await fetch(`/get-student/${schoolID}`);
+        if (!response.ok) throw new Error('Failed to fetch student details');
+
+        const student = await response.json();
+
+        document.getElementById('viewStudentID').textContent = student.School_ID || '';
+        document.getElementById('viewStudentEmail').textContent = student.Email || '';
+        document.getElementById('viewStudentFirstName').textContent = student.FirstName || '';
+        document.getElementById('viewStudentMiddleName').textContent = student.MiddleName || 'N/A';
+        document.getElementById('viewStudentSurname').textContent = student.LastName || '';
+        document.getElementById('viewStudentSuffix').textContent = student.Suffix || 'N/A';
+        document.getElementById('viewStudentGender').textContent = student.Gender || '';
+        document.getElementById('viewStudentContactNum').textContent = student.ContactNumber || '';
+
+        openModal('viewStudentModal');
+    } catch (error) {
+        console.error('Error fetching student details:', error);
+    }
+};
+
+// Function to update status in view modal
+function updateViewModalStatus(newStatus) {
+    const statusElement = document.getElementById('viewStatus');
+    if (statusElement) {
+        statusElement.textContent = newStatus;
+        statusElement.className = `mt-1 text-base ${newStatus === 'ACTIVE' ? 'text-green-500' : 'text-red-500'}`;
+    }
+}
+
+// Function to show notification
+function showNotification(message, type = 'success') {
+    const notification = document.createElement('div');
+    notification.className = `fixed top-4 right-4 p-4 rounded-md shadow-lg ${
+        type === 'success' ? 'bg-green-500' : 'bg-red-500'
+    } text-white text-sm font-medium z-50 transition-opacity duration-500`;
+    notification.textContent = message;
+
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        setTimeout(() => {
+            notification.remove();
+        }, 500);
+    }, 3000);
+}
+
+// Change password functionality
+window.changePasswordModal = function() {
+    openModal('changePasswordModal');
+};
+
 // Initialize event listeners when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
-    // Initialize the admin table
-    initializeAdminTable();
-
-    // Add Admin button event listener
-    const addAdminBtn = document.getElementById('addAdminBtn');
-    if (addAdminBtn) {
-        addAdminBtn.addEventListener('click', () => openModal('addAdminModal'));
+    console.log('Initializing admin and student management system...');
+    
+    // Initialize tables
+    loadAdminTable();
+    
+    if (document.getElementById('tab-box2')?.checked) {
+        loadStudentData();
     }
 
-    // Add Admin form submission handler
+    // Tab change handler
+    document.getElementById('tab-box2')?.addEventListener('change', function() {
+        if (this.checked) {
+            loadStudentData();
+        }
+    });
+
+    // Add Admin button handler
+    const addAdminBtn = document.getElementById('addAdminBtn');
+    if (addAdminBtn) {
+        addAdminBtn.addEventListener('click', () => {
+            openModal('addAdminModal');
+        });
+    }
+
+    // Add Admin Form Handler
     const addAdminForm = document.getElementById('addAdminForm');
     if (addAdminForm) {
         addAdminForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            const formData = new FormData(this);
             
+            const formData = new FormData(this);
+            const adminData = {};
+            formData.forEach((value, key) => {
+                adminData[key] = value;
+            });
+
+            if (!adminData.Suffix) adminData.Suffix = '';
+
             try {
                 const response = await fetch('/admin/add-admin', {
                     method: 'POST',
                     headers: {
                         'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
-                    body: JSON.stringify({
-                        Email: formData.get('Email'),
-                        School_ID: formData.get('School_ID'),
-                        FirstName: formData.get('FirstName'),
-                        MiddleName: formData.get('MiddleName'),
-                        LastName: formData.get('LastName'),
-                        Suffix: formData.get('Suffix'),
-                        Gender: formData.get('Gender'),
-                        ContactNumber: formData.get('ContactNumber'),
-                        Password: formData.get('Password'),
-                        Password_confirmation: formData.get('Password_confirmation')
-                    })
+                    body: JSON.stringify(adminData)
                 });
 
                 const data = await response.json();
-
+                
                 if (!response.ok) {
-                    throw new Error(data.errors ? Object.values(data.errors).flat().join('\n') : data.message);
+                    if (response.status === 422) {
+                        const errorMessages = Object.entries(data.errors)
+                            .map(([key, value]) => `${key}: ${value.join(', ')}`)
+                            .join('\n');
+                        alert('Validation errors:\n' + errorMessages);
+                        return;
+                    }
+                    throw new Error(data.message || 'Failed to add admin');
                 }
 
-                if (data.success) {
-                    alert('Admin added successfully!');
-                    closeModal('addAdminModal');
-                    addAdminForm.reset();
-                    // Refresh the table to show the new admin
-                    initializeAdminTable();
-                }
+                showNotification('Admin added successfully!', 'success');
+                closeModal('addAdminModal');
+                this.reset();
+                
+                const genderSelect = document.getElementById('gender');
+                if (genderSelect) genderSelect.selectedIndex = 0;
+                
+                await loadAdminTable();
+                
             } catch (error) {
-                alert(error.message);
-                console.error('Error:', error);
+                console.error('Error adding admin:', error);
+                showNotification(error.message || 'Failed to add admin. Please try again.', 'error');
             }
         });
     }
 
-    // Change password form handler
+    // Change Password Form Handler
     const changePasswordForm = document.getElementById('changePasswordForm');
     if (changePasswordForm) {
         changePasswordForm.addEventListener('submit', function(e) {
@@ -243,159 +360,46 @@ document.addEventListener('DOMContentLoaded', () => {
             const confirmPassword = document.getElementById('confirmNewPassword').value;
             
             if (newPassword !== confirmPassword) {
-                alert('Passwords do not match!');
+                showNotification('Passwords do not match!', 'error');
                 return;
             }
             
             const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
             if (!passwordRegex.test(newPassword)) {
-                alert('Password must meet all requirements!');
+                showNotification('Password must meet all requirements!', 'error');
                 return;
             }
             
             closeModal('changePasswordModal');
             this.reset();
+            showNotification('Password changed successfully!', 'success');
         });
     }
+});
 
-    // Modal close handlers
-    document.querySelectorAll('.modal-background').forEach(modal => {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                closeModal(modal);
-            }
-        });
-    });
-
-    // Close button handlers
-    document.querySelectorAll('[onclick*="closeModal"]').forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.preventDefault();
-            const modalId = button.getAttribute('onclick').match(/'([^']+)'/)?.[1];
-            if (modalId) closeModal(modalId);
-        });
-    });
-
-    // Escape key handler
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape') {
-            const visibleModal = document.querySelector('.modal-background[style*="flex"]');
-            if (visibleModal) closeModal(visibleModal);
-        }
-    });
-
-    // Function to load student data when the Students tab is selected
-    document.getElementById('tab-box2').addEventListener('change', function() {
-        if (this.checked) {
-            loadStudentData();
-        }
-    });
-
-    // Function to fetch and display student data
-    function loadStudentData() {
-        fetch('/get-students-list')
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.getElementById('studentTableBody');
-                tableBody.innerHTML = ''; // Clear existing rows
-
-                data.forEach(student => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${student.School_ID}</td>
-                        <td>${student.Email}</td>
-                        <td>${student.Name}</td>
-                        <td><button class="view-btn" onclick="viewStudentModal('${student.School_ID}')">View Student</button></td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            })
-            .catch(error => console.error('Error:', error));
+// Add CSS styles
+const style = document.createElement('style');
+style.textContent = `
+    .status-select.active {
+        background-color: #22c55e;
     }
-
-    // Load student data when page loads if student tab is active
-    document.addEventListener('DOMContentLoaded', function() {
-        if (document.getElementById('tab-box2').checked) {
-            loadStudentData();
-        }
-    });
-
-    // Function to load admin data
-function loadAdminData() {
-    fetch('/get-admins-list')
-        .then(response => response.json())
-        .then(data => {
-            const tableBody = document.getElementById('tableBody');
-            tableBody.innerHTML = ''; // Clear existing rows
-
-            data.forEach(admin => {
-                const row = document.createElement('tr');
-                const statusClass = admin.Status === 'active' ? 'status-active' : 'status-inactive';
-                
-                row.innerHTML = `
-                    <td>${admin.School_ID}</td>
-                    <td>${admin.Email}</td>
-                    <td>${admin.Name}</td>
-                    <td><span class="${statusClass}">${admin.Status}</span></td>
-                    <td>
-                        <button class="view-btn" onclick="viewAdminModal('${admin.School_ID}')">View Admin</button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-// Load admin data when page loads if admin tab is active
-document.addEventListener('DOMContentLoaded', function() {
-    if (document.getElementById('tab-box1').checked) {
-        loadAdminData();
+    
+    .status-select.inactive {
+        background-color: #ef4444;
     }
-});
-
-// Load admin data when switching to admin tab
-document.getElementById('tab-box1').addEventListener('change', function() {
-    if (this.checked) {
-        loadAdminData();
+    
+    .status-select:disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
     }
-});
-
-// Handle Add Admin button click
-document.getElementById('addAdminBtn').addEventListener('click', function() {
-    const modal = document.getElementById('addAdminModal');
-    modal.style.display = 'flex';
-});
-
-// Handle admin view button click
-function viewAdminModal(schoolId) {
-    // Fetch specific admin details
-    fetch(`/get-admin-details/${schoolId}`)
-        .then(response => response.json())
-        .then(admin => {
-            // Populate modal fields
-            document.getElementById('viewSchoolID').textContent = admin.School_ID;
-            document.getElementById('viewEmail').textContent = admin.Email;
-            document.getElementById('viewFirstName').textContent = admin.FirstName;
-            document.getElementById('viewMiddleName').textContent = admin.MiddleName || 'N/A';
-            document.getElementById('viewSurname').textContent = admin.LastName;
-            document.getElementById('viewSuffix').textContent = admin.Suffix || 'N/A';
-            document.getElementById('viewGender').textContent = admin.Gender;
-            document.getElementById('viewContactNum').textContent = admin.ContactNumber;
-            document.getElementById('viewStatus').textContent = admin.Status;
-
-            // Show the modal
-            document.getElementById('viewAdminModal').style.display = 'flex';
-        })
-        .catch(error => console.error('Error:', error));
-}
-
-// Function to close modals
-function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
-}
-});
-
-// Additional utility functions
-window.viewStudentModal = () => openModal('viewStudentModal');
-window.changePasswordModal = () => openModal('changePasswordModal');
+    
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(-10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+    
+    .notification {
+        animation: fadeIn 0.3s ease-out;
+    }
+`;
+document.head.appendChild(style);

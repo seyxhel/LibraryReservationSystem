@@ -88,12 +88,6 @@ class AdminController extends Controller
         }
     }
 
-    public function getAdminsList()
-    {
-        $admins = DB::select('EXEC sp_GetAdminsList');
-        return response()->json($admins);
-    }
-
     // In AdminController
     public function updateStatus(Request $request, $id)
     {
@@ -276,9 +270,10 @@ class AdminController extends Controller
         
         return response()->json(null, 404);
     }
-
+    
     public function getAdmins()
     {
-        return DB::select('SELECT * FROM vw_AdminUsers');
+        $admins = DB::select('SELECT * FROM vw_AdminUsers');
+        return response()->json($admins);
     }
 }

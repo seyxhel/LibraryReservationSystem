@@ -147,7 +147,6 @@ Route::middleware('auth:admin')->prefix('admin')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
     Route::get('/user-management', [AdminController::class, 'userManagement'])->name('admin.user-management');
     Route::post('/add-admin', [AdminController::class, 'addAdmin'])->name('admin.add');
-    Route::get('/admin/get-admins', [AdminController::class, 'getAdmins'])->name('admin.getAdmins');
     Route::post('/admin/update-status/{id}', [AdminController::class, 'updateStatus']);
 });
 
@@ -162,6 +161,6 @@ Route::middleware(['auth:admin'])->group(function () {
 
 Route::get('/get-students-list', [AdminController::class, 'getStudentsList'])->name('admin.students.list');
 
-Route::get('/get-admins-list', [AdminController::class, 'getAdminsList'])->name('admin.admins.list');
-
 Route::get('/get-admin-details/{schoolId}', [AdminController::class, 'getAdminDetails'])->name('admin.details');
+
+Route::get('/admin/get-admins', [AdminController::class, 'getAdmins'])->name('admin.getAdmins');

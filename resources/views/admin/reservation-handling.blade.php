@@ -171,6 +171,7 @@
                                     <td>01-01-2024</td>
                                     <td>0001</td>
                                     <td><button class="confirm-btn" onclick="confirm(this)">Confirm Reservation</button>
+                                    <td><button class="confirm-btn" onclick="cancel(this)">Cancel Reservation</button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -203,6 +204,11 @@
         // Confirm Reservation Alert
         function confirm(button) {
         alert('Book Reservation Confirmed!');
+        button.disabled = true;
+    }
+        // Cancel Reservation Alert
+        function cancel(button) {
+        alert('Book Reservation Cancelled!');
         button.disabled = true;
     }
     </script>

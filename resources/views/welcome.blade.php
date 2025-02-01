@@ -20,7 +20,7 @@
                 <span>Please choose your destination.</span>
             </div>
             <div class="buttons">
-                <button class="button admin" onclick="window.location.href='{{ route('admin.login') }}'">ADMIN</button>
+                <button class="button admin" onclick="window.location.href='{{ route('admin.login') }}'">FACULTY</button>
                 <button class="button student" onclick="window.location.href='{{ route('student.welcome') }}'">STUDENT</button>
             </div>
         </div>
