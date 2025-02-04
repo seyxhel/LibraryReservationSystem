@@ -45,7 +45,7 @@
           </div>
 
         </div>
-          
+
         <div class="main_container">
             <div class="sidebar">
                 <div class="sidebar__inner">
@@ -78,20 +78,29 @@
               </div>
 
             <script>
+                // Simulate fetching data from a source (e.g., backend API)
+            const userData = {
+            name: "{{ Auth::guard('student')->user()->FirstName }} {{ Auth::guard('student')->user()->LastName }}"
+        };
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const userNameDiv = document.getElementById("userName");
+            userNameDiv.textContent = userData.name; // Only display the user's name
+        });
 
               function updateDateTime() {
                 const now = new Date();
-                
+
                 const options = { year: 'numeric', month: 'long', day: 'numeric' };
                 const date = now.toLocaleDateString('en-US', options);
-                
+
                 // Format the time
                 const time = now.toLocaleTimeString('en-US');
-                
+
                 document.getElementById('current-date').textContent = date;
                 document.getElementById('current-time').textContent = time;
             }
-        
+
             setInterval(updateDateTime, 1000);
             window.onload = updateDateTime;
             </script>
@@ -104,128 +113,110 @@
                 <div class="box2">
                   <h1 id="overtime-count"></h1>
                   <span>Total Number of Overtime Books</span></div>
-              </div>  
+              </div>
+
+              <script>
+                document.addEventListener("DOMContentLoaded", function () {
+                  fetchConfirmedReservations();
+                  fetchOvertimeReservations();
+                });
+
+                function fetchConfirmedReservations() {
+                  fetch("{{ route('student.confirmed.reservations') }}")
+                      .then(response => response.json())
+                      .then(data => {
+                          console.log("Confirmed Reservations:", data.confirmedReservations); // Debugging
+                          document.getElementById('reserved-count').textContent = data.confirmedReservations;
+                      })
+                      .catch(error => {
+                          console.error("Error fetching confirmed reservations:", error);
+                          document.getElementById('reserved-count').textContent = "Error";
+                      });
+                }
+
+                function fetchOvertimeReservations() {
+                  fetch("{{ route('student.overtime.reservations') }}")
+                      .then(response => response.json())
+                      .then(data => {
+                          console.log("Overtime Reservations:", data.overtimeReservations); // Debugging
+                          document.getElementById('overtime-count').textContent = data.overtimeReservations;
+                      })
+                      .catch(error => {
+                          console.error("Error fetching overtime reservations:", error);
+                          document.getElementById('overtime-count').textContent = "Error";
+                      });
+                }
+                </script>
 
               <div class="container2">
                 <div class="box3">
                   <div class="header">
                     <h1 id="new-box1">Reservations</h1>
-                    <button id="view-all-button" onclick="location.href='{{ route('student.reservation') }}'">View All</button>
                   </div>
-                  <table id="reservations-table">
-                    <thead>
-                      <tr>
-                        <th>Research Title</th>
-                        <th>Category</th>
-                        <th>Reservation Date</th>
-                        <th>Time Slot</th>
-                        <th>Reserved Until</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody id="reservations-body">
-                      <!-- Rows will be dynamically inserted here -->
-                    </tbody>
-                  </table>
+
+                  <!-- This container will make the table scrollable -->
+                  <div id="reservations-table-container">
+                    <table id="reservations-table">
+                        <thead>
+                            <tr>
+                                <th>Research Title</th>
+                                <th>Category</th>
+                                <th>Reservation Date</th>
+                                <th>Time Slot</th>
+                                <th>Reserved Until</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reservations-body">
+                            <tr><td colspan="5">Loading reservations...</td></tr>
+                        </tbody>
+                    </table>
                 </div>
-              </div>
+            </div>
+        </div>
 
-              <!-- This is the container that will show reservation details -->
-              <div id="container-view" style="display: none;">
-                <div class="view-content">
-                  <h2 id="view-title">Reservation Details</h2>
-                  <p id="view-category"></p>
-                  <p id="view-published-date"></p> <!-- Published Date -->
-                  <p id="view-researchers"></p> <!-- Researchers -->
-                  <p id="view-abstract"></p> <!-- Abstract -->
-                  <p id="view-start-date"></p>
-                  <p id="view-time-slot"></p>
-                  <p id="view-end-date"></p>
-                  <button id="close-view-button">Close</button>
-                </div>
-              </div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                fetchReservations();
+            });
 
-              <script>
-              // Example data to populate the table, including Published Date, Researchers, and Abstract
-                const reservationsData = [
-                {
-                  title: "Example Research 1",
-                  category: "Category 1",
-                  startDate: "2025-01-01",
-                  timeSlot: "7AM-9AM",
-                  endDate: "2025-12-31",
-                  publishedDate: "2025-01-01",   // Added Published Date
-                  researchers: "John Doe, Jane Smith",  // Added Researchers
-                  abstract: "This research focuses on the impact of AI in education, exploring various applications and outcomes.",  // Added Abstract
-                },
-                {
-                  title: "Example Research 2",
-                  category: "Category 2",
-                  startDate: "2025-02-01",
-                  timeSlot: "9AM-11AM",
-                  endDate: "2025-11-30",
-                  publishedDate: "2025-02-01",   // Added Published Date
-                  researchers: "Alice Brown, Bob White",  // Added Researchers
-                  abstract: "This study investigates climate change solutions, focusing on renewable energy innovations.",  // Added Abstract
-                },
-                ];
+            function fetchReservations() {
+                fetch("{{ route('student.reservations.list') }}")
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log("Fetched reservations:", data); // Debugging
 
-                // Function to populate the table dynamically
-                function populateReservationsTable(data) {
+                        if (!Array.isArray(data) || data.length === 0) {
+                            document.getElementById("reservations-body").innerHTML = "<tr><td colspan='5'>No reservations found</td></tr>";
+                        } else {
+                            populateReservationsTable(data);
+                        }
+                    })
+                    .catch(error => {
+                        console.error("Error fetching reservations:", error);
+                        document.getElementById("reservations-body").innerHTML = "<tr><td colspan='5'>Error loading reservations</td></tr>";
+                    });
+            }
+
+            function populateReservationsTable(data) {
                 const tableBody = document.getElementById("reservations-body");
+                tableBody.innerHTML = ""; // Clear table
 
-                data.forEach((item, index) => {
-                  const row = document.createElement("tr");
+                data.forEach(item => {
+                    const row = document.createElement("tr");
 
-                  row.innerHTML = `
-                    <td>${item.title}</td>
-                    <td>${item.category}</td>
-                    <td>${item.startDate}</td>
-                    <td>${item.timeSlot}</td>
-                    <td>${item.endDate}</td>
-                    <td>
-                      <div class="actions-wrapper">
-                        <button class="view-button" data-index="${index}">View</button>
-                      </div>
-                    </td>
-                  `;
+                    row.innerHTML = `
+                        <td>${item.Title || 'N/A'}</td>
+                        <td>${item.Categories || 'N/A'}</td>
+                        <td>${item.ReservationDate || 'N/A'}</td>
+                        <td>${item.TimeSlot || 'N/A'}</td>
+                        <td>${item.ReservedUntil || 'N/A'}</td>
+                    `;
 
-                  tableBody.appendChild(row);
+                    tableBody.appendChild(row);
                 });
-                }
+            }
+            </script>
 
-                // Event listener for button actions
-                document.addEventListener("click", (event) => {
-                // If "View" button is clicked, open the container-view and populate it
-                if (event.target.classList.contains("view-button")) {
-                  const index = event.target.getAttribute("data-index");
-                  const reservation = reservationsData[index];
-
-                  // Populate the container-view with reservation details
-                  document.getElementById("view-title").textContent = reservation.title;
-                  document.getElementById("view-category").textContent = `Category: ${reservation.category}`;
-                  document.getElementById("view-start-date").textContent = `Reservation Date: ${reservation.startDate}`;
-                  document.getElementById("view-time-slot").textContent = `Time Slot: ${reservation.timeSlot}`;
-                  document.getElementById("view-end-date").textContent = `Reserved Until: ${reservation.endDate}`;
-                  document.getElementById("view-published-date").textContent = `Published Date: ${reservation.publishedDate}`;  // Display Published Date
-                  document.getElementById("view-researchers").textContent = `Researcher(s): ${reservation.researchers}`;  // Display Researchers
-                  document.getElementById("view-abstract").textContent = `Abstract: ${reservation.abstract}`;  // Display Abstract
-
-                  // Show the container-view
-                  document.getElementById("container-view").style.display = "flex";
-                }
-
-                // If "Close" button is clicked, hide the container-view
-                if (event.target.id === "close-view-button") {
-                  document.getElementById("container-view").style.display = "none";
-                }
-                });
-
-                // Populate the table on page load
-                document.addEventListener("DOMContentLoaded", () => {
-                populateReservationsTable(reservationsData);
-                });
-              </script>
 
             </div>
 
@@ -264,23 +255,23 @@
 <div class="two-forms">
     <div class="input-box">
         <label for="gender">Gender:</label>
-        <input type="text" class="input-field" id="gender" placeholder="Gender" 
-            value="{{ $student->Gender == 'male' ? 'Male' : ($student->Gender == 'female' ? 'Female' : ($student->Gender == 'other' ? 'Other' : 'Prefer not to say')) }}" 
+        <input type="text" class="input-field" id="gender" placeholder="Gender"
+            value="{{ $student->Gender == 'male' ? 'Male' : ($student->Gender == 'female' ? 'Female' : ($student->Gender == 'other' ? 'Other' : 'Prefer not to say')) }}"
             readonly>
         <i class="bx bx-chevron-down"></i>
     </div>
 
     <div class="input-box">
         <label for="program">College Program:</label>
-        <input type="text" class="input-field" id="program" placeholder="College Program" 
-            value="{{ 
-                $student->Program_ID == 1 ? 'Information Technology' : 
-                ($student->Program_ID == 2 ? 'Home Economics' : 
-                ($student->Program_ID == 3 ? 'Information Communication and Technology' : 
-                ($student->Program_ID == 4 ? 'Human Resource Management' : 
-                ($student->Program_ID == 5 ? 'Marketing Management' : 
-                ($student->Program_ID == 6 ? 'Entrepreneurship' : 
-                ($student->Program_ID == 7 ? 'Fiscal Administration' : 'Office Management Technology')))))) 
+        <input type="text" class="input-field" id="program" placeholder="College Program"
+            value="{{
+                $student->Program_ID == 1 ? 'Information Technology' :
+                ($student->Program_ID == 2 ? 'Home Economics' :
+                ($student->Program_ID == 3 ? 'Information Communication and Technology' :
+                ($student->Program_ID == 4 ? 'Human Resource Management' :
+                ($student->Program_ID == 5 ? 'Marketing Management' :
+                ($student->Program_ID == 6 ? 'Entrepreneurship' :
+                ($student->Program_ID == 7 ? 'Fiscal Administration' : 'Office Management Technology'))))))
             }}" s
             readonly>
         <i class="bx bx-chevron-down"></i>
@@ -299,7 +290,7 @@
         <label for="email">E-mail Address:</label>
         <input type="email" class="input-field" id="email" placeholder="E-mail Address" value="{{ $student->Email }}" readonly>
         <i class="bx bx-envelope"></i>
-    </div>                
+    </div>
 
                 <div class="button-group">
                   <button class="btn btn-change" type="button" onclick="toggleChangePassword()">Change Password</button>
@@ -310,7 +301,7 @@
               </form>
 
             </div>
-            
+
             <div class="profile-container" id="change-password-section" style="display: none;">
             <button class="close-btn" onclick="toggleChangePassword()">×</button>
 
@@ -424,27 +415,7 @@
 
         </div>
 
-        
+
       </div>
-              
-      <script>
-      // Simulate fetching data from a source (e.g., backend API)
-      const userData = {
-            name: "{{ Auth::guard('student')->user()->FirstName }} {{ Auth::guard('student')->user()->LastName }}"
-        };
-
-        document.addEventListener("DOMContentLoaded", () => {
-            const userNameDiv = document.getElementById("userName");
-            userNameDiv.textContent = userData.name; // Only display the user's name
-        });
-      // Simulating dynamic data (replace these values with your actual source)
-      const reservedBooks = 90; // Example value for reserved books
-      const overtimeBooks = 120; // Example value for overtime books
-
-      // Updating the h1 content dynamically
-      document.getElementById('reserved-count').textContent = reservedBooks;
-      document.getElementById('overtime-count').textContent = overtimeBooks;
-      </script>
-
-</body>
+    </body>
 </html>

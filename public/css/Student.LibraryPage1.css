@@ -6,12 +6,12 @@
     text-decoration: none;
     font-family: Arial;
   }
-  
+
   .wrapper{
     width: 100%;
     height: 100%;
   }
-  
+
   .top_navbar {
     background: #830000;
     height: 50px;
@@ -23,18 +23,18 @@
     top: 0;
     color: white;
   }
-  
+
   .header {
     text-align: center;
     margin-left: 10px;
     display: flex;
     align-items: center;
   }
-  
+
   .logo {
     width: 110px;
   }
-  
+
   /* Flex container to align .user_name and .dropdown horizontally */
   .userman {
     display: flex;
@@ -43,20 +43,20 @@
     gap: 3px; /* Space between user_name and dropdown */
     margin-right: 20px; /* Add space from the right edge */
   }
-  
+
   .user_name {
     margin-right: 20px; /* Space on the right side */
     font-size: 14px; /* Adjust font size */
     font-weight: bold; /* Make it stand out */
     text-align: right;
   }
-  
+
   /* The dropdown container */
   .dropdown {
     position:sticky; /* Position relative to contain the dropdown content */
     display: inline-block; /* Make the container an inline element */
   }
-  
+
   /* Style for the dropdown button */
   .dropbtn {
     background-color: #ffffff;
@@ -67,7 +67,7 @@
     cursor: pointer;
     border-radius: 4px;
   }
-  
+
   /* The content of the dropdown (hidden by default) */
   .dropdown-content {
     display: none; /* Hidden by default */
@@ -80,7 +80,7 @@
     z-index: 1; /* Make sure it's above other content */
     border-radius: 4px;
   }
-  
+
   /* Style for the links inside the dropdown */
   .dropdown-content a {
     color: black;
@@ -89,22 +89,22 @@
     text-decoration: none;
     display: block;
   }
-  
+
   /* Change the background color of links when hovered */
   .dropdown-content a:hover {
     background-color: #f1f1f1;
   }
-  
+
   /* Display the dropdown content when hovering over the dropdown */
   .dropdown:hover .dropdown-content {
     display: block; /* Show the dropdown content */
   }
-  
+
   /* Change the button's background color when hovering over the dropdown */
   .dropdown:hover .dropbtn {
     background-color: #a04545;
   }
-  
+
   .main_container .sidebar{
     position: fixed;
     top: 50px;
@@ -115,18 +115,18 @@
     transition: all 0.3s ease;
     background-image: linear-gradient(rgba(0, 0, 0, 0.5),rgba(0, 0, 0,0.5)), url('/assets/Untitled\ design\ \(9\).png');
   }
-  
+
   .main_container .sidebar .sidebar__inner{
     position: relative;
   }
-  
+
   .main_container .container{
     margin-top: 45px;
     margin-left: 225px;
     padding: 15px;
     transition: all 0.3s ease;
   }
-  
+
   /* Title Bar */
    .title-bar {
     justify-content: left;
@@ -134,7 +134,7 @@
     font-weight: bold;
     gap: 15px;
   }
-  
+
   .main_container .sidebar ul li a{
     color: #ffffff;
     font-size: 16px;
@@ -146,17 +146,17 @@
     margin-bottom: 1px;
     transition: all 0.3s ease;
   }
-  
+
   .main_container .sidebar ul li a span{
     display: inline-block;
   }
-  
+
   .main_container .sidebar ul li a:hover,
   .main_container .sidebar ul li a.active{
     background: #910000b2;
     color: #ffffff;
   }
-  
+
   .main_container .container .item{
     background: #fff;
     border: 1px solid #E0F2F1;
@@ -165,18 +165,18 @@
     font-size: 14px;
     line-height: 22px;
   }
-  
+
   /* after adding active class */
   .wrapper.active .sidebar{
     width: 80px;
   }
-  
-  
+
+
   .wrapper.active .main_container .container{
     width: calc(100% - 80px);
     margin-left: 80px;
   }
-  
+
   /* Title Bar */
   .title-bar {
     display: flex;
@@ -196,7 +196,7 @@
     gap: 5px; /* Consistent spacing between containers */
     overflow: visible; /* Ensure the container itself doesn't scroll */
   }
-  
+
   /* Left Container */
   .left-container {
     width: 74%; /* Set the width of the left container */
@@ -207,21 +207,21 @@
     border-radius: 5px; /* Rounded corners */
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
   }
-  
+
   /* Ensure the list container is scrollable */
   #item-list {
     max-height: 475px; /* Set a maximum height for the scrollable area */
     overflow-y: auto; /* Enable vertical scrolling only for this section */
     padding-right: 10px; /* Add padding for better spacing */
   }
-  
+
   /* General styling for the list */
   #list {
     list-style-type: none; /* Remove default bullet points */
     margin: 0;
     padding: 0;
   }
-  
+
   /* Styling individual items */
   .item {
     padding: 10px;
@@ -231,19 +231,19 @@
     border-radius: 5px; /* Rounded corners for aesthetics */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); /* Subtle shadow effect */
   }
-  
+
   /* Status Styling */
   .status.available {
     color: green; /* Green for available status */
     font-weight: bold;
   }
-  
+
   /* Status Styling */
   .status.reserved {
     color: rgb(9, 0, 128); /* Green for available status */
     font-weight: bold;
   }
-  
+
   /* Open Button Styling */
   .open-btn {
     padding: 6px 12px;
@@ -283,13 +283,13 @@
   #details-container h3 {
     margin: 0 0 10px;
   }
-  
+
   #details-container p {
     font-size: 14px;
     margin:  0 0 10px; /* Adds space between paragraphs */
     color: #000000; /* Slightly dimmed text color for readability */
   }
-  
+
   #close-button {
     background-color: #f44336; /* Red */
     color: white;
@@ -305,7 +305,7 @@
     background-color: #8f0000;
 
   }
-  
+
   #reserve-button {
     background-color: #4CAF50; /* Green */
     color: white;
@@ -321,12 +321,12 @@
     background-color: rgb(16, 99, 0);
 
   }
-  
+
   #close-button, #reserve-button {
     text-align: center; /* Center text inside the button */
   }
 
-  
+
 /* Optional: dim background when overlay is visible */
 #overlay {
     position: fixed;
@@ -415,21 +415,21 @@ form button:nth-of-type(2):hover {
     gap: 10px; /* Space between elements */
   }
 
-  
+
   .right-container h2 {
     font-size: 18px;
     text-align: center;
     font-family: Helvetica;
     margin-bottom: 20px;
   }
-  
+
   .right-container label {
     font-size: 12px;
     font-weight: regular;
     display: block;
     margin-bottom: 3px;
   }
-  
+
   .right-container input,
   .right-container select {
     width: 100%;
@@ -439,7 +439,7 @@ form button:nth-of-type(2):hover {
     border-radius: 4px;
     box-sizing: border-box; /* Ensures padding is included in the width */
   }
-  
+
   #filter-btn {
     padding: 10px 15px;
     background-color: #8b0000;
@@ -449,7 +449,7 @@ form button:nth-of-type(2):hover {
     cursor: pointer;
     width: 100%;
   }
-  
+
   #filter-btn:hover {
     background-color: #6d0000;
   }
@@ -469,7 +469,7 @@ form button:nth-of-type(2):hover {
     z-index: 1000; /* Ensure it's in front of other content */
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   }
-  
+
   .close-btn {
     position: absolute; /* Position the button in the top-right corner */
     top: 15px;
@@ -481,11 +481,11 @@ form button:nth-of-type(2):hover {
     cursor: pointer;
     transition: color 0.3s;
   }
-  
+
   .close-btn:hover {
     color: rgb(255, 44, 44); /* Change color to red on hover */
   }
-  
+
   /* Styling for the profile container heading */
   .profile-container h2 {
     font-size: 24px;
@@ -497,8 +497,8 @@ form button:nth-of-type(2):hover {
     border-bottom: 2px solid #8b0000; /* Adds a bottom border */
     letter-spacing: 1px; /* Slight spacing between letters */
   }
-  
-  
+
+
   /* General form container styling */
   form {
     max-width: 1000px;
@@ -508,36 +508,36 @@ form button:nth-of-type(2):hover {
     font-family: Arial, sans-serif;
   }
 
-  
+
   /* Four-forms layout (Lastname, Firstname, Middlename, Suffix) */
   .four-forms {
     display: flex;
     gap: 10px;
     margin-bottom: 3px;
   }
-  
+
   .four-forms .input-box {
     flex: 1; /* Ensures equal width for all input boxes */
     position: relative;
   }
-  
+
   /* Two-forms layout (Gender, College Program) */
   .two-forms {
     display: flex;
     gap: 10px;
     margin-bottom: 3px;
   }
-  
+
   .two-forms .input-box {
     flex: 1; /* Ensures equal width for both input boxes */
     position: relative;
   }
-  
+
   /* General input box styling */
   .input-box {
     position: relative;
   }
-  
+
   .input-field {
     width: 100%;
     padding: 10px 40px 10px 15px;
@@ -549,7 +549,7 @@ form button:nth-of-type(2):hover {
     cursor: not-allowed; /* Shows not-allowed cursor */
     box-sizing: border-box;
   }
-  
+
   /* Icon Styling */
   .input-box i {
     position: absolute;
@@ -559,25 +559,25 @@ form button:nth-of-type(2):hover {
     font-size: 18px;
     color: #aaa;
   }
-  
+
   /* Input box styling for email and contact fields */
   .input-box:last-child {
     margin-bottom: 0;
   }
-  
+
   /* Responsive styling */
   @media (max-width: 768px) {
     .four-forms,
     .two-forms {
       flex-wrap: wrap;
     }
-  
+
     .four-forms .input-box,
     .two-forms .input-box {
       flex: 1 1 100%; /* Stack input boxes on smaller screens */
     }
   }
-  
+
 /* Button group styling */
 .button-group {
   display: flex;
@@ -608,11 +608,11 @@ form button:nth-of-type(2):hover {
 
 /* Edit Profile Button */
 .btn-edit {
-  background-color: #129700; 
+  background-color: #129700;
 }
 
 .btn-edit:hover {
-  background-color: #108a00; 
+  background-color: #108a00;
 }
 
 /* Change Pass Button */
@@ -641,7 +641,25 @@ form button:nth-of-type(2):hover {
     cursor: pointer;
     transition: background-color 0.3s ease;
   }
-  
+
   .btn-cancel:hover {
     background-color: darkred; /* Hover effect similar to delete button */
   }
+
+  #clear-btn {
+    padding: 10px 15px;
+    background-color: #8b0000; /* Dark Red */
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 10px; /* Adds space between the Apply and Clear buttons */
+}
+
+.processing-message {
+  color: rgb(7, 250, 19); /* Change to any color you like */
+  font-weight: bold;
+}

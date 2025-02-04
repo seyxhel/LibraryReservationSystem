@@ -18,7 +18,7 @@ class AdminsTableSeeder extends Seeder
         DB::table('Admins')->insert([
             [
                 'Email' => 'admin@uniarchive.com',
-                'School_ID' => '2025-01-CM-2',
+                'School_ID' => '2025-00001-CM-2',
                 'LastName' => 'Doe',
                 'FirstName' => 'John',
                 'Gender' => 'male',

@@ -29,18 +29,20 @@ class AdminAuthController extends Controller
             'password' => 'required',
         ]);
 
-        // Check the credentials
-        $credentials = [
-            'Email' => $request->email,
-            'password' => $request->password,
-        ];
+        // Find admin by email
+        $admin = Admin::where('Email', $request->email)->first();
 
-        if (Auth::guard('admin')->attempt($credentials)) {
-            // Log in the admin and redirect to dashboard
+        // Check if admin exists and is inactive
+        if (!$admin || $admin->Status === 'inactive') {
+            return redirect()->back()->withErrors(['email' => 'Account inactive.']);
+        }
+
+        // Attempt login if the account is active
+        if (Auth::guard('admin')->attempt(['Email' => $request->email, 'password' => $request->password])) {
             return redirect()->route('admin.dashboard')->with('success', 'Logged in successfully!');
         }
 
-        // If credentials are incorrect, redirect back with an error message
+        // If credentials are incorrect, return error
         return redirect()->back()->withErrors(['email' => 'Invalid credentials.']);
     }
 

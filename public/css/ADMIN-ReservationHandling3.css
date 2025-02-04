@@ -3,10 +3,10 @@
 @font-face {
     font-family: 'Roxborough CF'; /* Custom font name */
     src: url('Roxborough%20CF.woff') format('woff'); /* Correct path encoding */
-    font-weight: normal; 
-    font-style: normal;  
+    font-weight: normal;
+    font-style: normal;
   }
-  
+
   /* Default font styles */
   * {
     margin: 0;
@@ -14,7 +14,7 @@
     box-sizing: border-box;
     font-family: 'Poppins', sans-serif; /* Default font with fallback */
   }
-  
+
   :root {
     --background-color1: #961c1e;
     --background-color2: #ffffff;
@@ -31,7 +31,7 @@
     max-width: 100%;
     overflow-x: hidden;
   }
-  
+
   header {
     height: 60px;
     width: 100vw;
@@ -44,23 +44,23 @@
     justify-content: space-between;
     align-items: center;
   }
-  
+
   .logo {
     font-family: 'Roxborough CF', serif;
     font-size: 27px;
     font-weight: 600;
     color: #ffde70;
-  
+
   }
-  
+
   .icn {
     height: 30px;
   }
-  
+
   .menuicn {
     cursor: pointer;
   }
-  
+
   .searchbar,
   .message,
   .logosec {
@@ -68,15 +68,15 @@
     align-items: center;
     justify-content: center;
   }
-  
+
   .searchbar2 {
     display: none;
   }
-  
+
   .logosec {
     gap: 60px;
   }
-  
+
   .message {
     gap: 40px;
     position: relative;
@@ -111,7 +111,7 @@
   .dpicn {
     height: 42px;
   }
-  
+
   .main {
     height: calc(100vh - 70px);
     width: 100%;
@@ -128,9 +128,9 @@
     outline: 1px solid #ccc;
     margin: 20px;
   }
-  
+
   .main::-webkit-scrollbar-thumb {
-    background-image: 
+    background-image:
           linear-gradient(to bottom, rgb(0, 0, 85), rgb(0, 0, 50));
   }
   .main::-webkit-scrollbar {
@@ -139,7 +139,7 @@
   .main::-webkit-scrollbar-track {
     background-color: #9e9e9eb2;
   }
-  
+
   .nav {
     min-height: 100vh;
     width: 250px;
@@ -182,7 +182,7 @@
     color: #000000;
     text-decoration: none;
   }
-  
+
   .nav-option:hover {
     border-left: 5px solid #880000af;
     background-color: #ffd8df;
@@ -191,21 +191,21 @@
   .nav-img {
     height: 30px;
   }
-  
+
   .nav-upper-options {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 30px;
   }
-  
+
   .nav-logout {
     margin-top: auto;
     display: flex;
     flex-direction: column;
     align-items: center;;
   }
-  
+
   .option1 {
     background-color: var(--background-color4);
     color: black;
@@ -226,7 +226,7 @@
     cursor: pointer;
     transition: transform 0.3s ease-in-out;
   }
-  
+
   .dashboard-title {
     font-size: 2.5rem;
     display: flex;
@@ -236,12 +236,12 @@
     justify-content: space-between; /* Align date/time to the right */
   }
 
-  .date-time { 
+  .date-time {
     font-size: 1.5rem;
     margin-right: 20px;
     color: #161414;
   }
-  
+
   /*FILTER BOX FOR USER MGMT ONLY*/
   .filter-container{
     display: flex;
@@ -264,7 +264,7 @@
     border-radius: 5px;
     border: 1px solid #ccc;
   }
-  
+
   .report-container {
     min-height: 300px;
     max-width: 1200px;
@@ -283,7 +283,7 @@
     padding: 20px 20px 10px 20px;
     border-bottom: 2px solid #961c1e;
   }
-  
+
   /*table inside container*/
   table {
     width: 100%;
@@ -306,7 +306,7 @@
     font-weight: 600;
     color: #961c1e;
   }
-  
+
   .add {
     height: 35px;
     width: 90px;
@@ -317,7 +317,7 @@
     border: none;
     cursor: pointer;
   }
-  
+
   .report-body {
     max-width: 1160px;
     overflow-x: auto;
@@ -334,12 +334,12 @@
     font-size: 18px;
     letter-spacing: 0px;
   }
-  
+
   .items {
     width: 1120px;
     margin-top: 15px;
   }
-  
+
   .item1 {
     margin-top: 20px;
   }
@@ -348,7 +348,7 @@
     letter-spacing: 0px;
     font-weight: 600;
   }
-  
+
   .label-tag {
     width: 100px;
     text-align: center;
@@ -403,7 +403,7 @@
   text-align: left;
 }
 
-.dropdown-content a { 
+.dropdown-content a {
   color: black;
   padding: 12px 16px;
   text-decoration: none;
@@ -420,4 +420,43 @@
 
 .dropdown:hover .dpicn {
   background-color: #531616;
+}
+
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.confirm-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background-color: #ff9800;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.confirm-btn:disabled,
+.cancel-btn:disabled,
+.delete-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
 }

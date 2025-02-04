@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Models\Student; // Import the Student model
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Password;
+use Illuminate\Support\Facades\Log;
 
 class StudentAuthController extends Controller
 {
@@ -90,16 +91,16 @@ class StudentAuthController extends Controller
 
         try {
             // Call the stored procedure to insert the student
-            DB::statement('EXEC AddStudentAccount 
-                @Email = :email, 
-                @School_ID = :school_id,    
-                @Program_ID = :program_id, 
-                @LastName = :last_name, 
-                @FirstName = :first_name, 
-                @MiddleName = :middle_name, 
-                @Suffix = :suffix, 
-                @Gender = :gender, 
-                @ContactNumber = :contact_number, 
+            DB::statement('EXEC AddStudentAccount
+                @Email = :email,
+                @School_ID = :school_id,
+                @Program_ID = :program_id,
+                @LastName = :last_name,
+                @FirstName = :first_name,
+                @MiddleName = :middle_name,
+                @Suffix = :suffix,
+                @Gender = :gender,
+                @ContactNumber = :contact_number,
                 @Password = :password', [
                 'email' => $validatedData['email'],
                 'school_id' => $validatedData['school_id'],
@@ -202,19 +203,19 @@ class StudentAuthController extends Controller
             if ($request->has('email')) {
                 $student->Email = $request->input('email');
             }
-    
+
             // Update the UpdatedAt field manually
             $student->UpdatedAt = now(); // `now()` provides the current timestamp
-    
+
             // Save the changes to the database
             $student->save();
-    
+
             // Redirect back with a success message
             return redirect()->route('student.dashboard')->with('success', 'Profile updated successfully.');
         } catch (\Exception $e) {
             // Log the error for debugging
             \Log::error('Profile Update Error: ' . $e->getMessage());
-    
+
             // Redirect back with an error message
             return back()->with('error', 'An error occurred while updating your profile. Please try again.');
         }

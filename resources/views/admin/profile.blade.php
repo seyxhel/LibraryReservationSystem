@@ -17,8 +17,8 @@
     <div class="logosec">
             <div class="logo">UNIARCHIVE</div>
             <img src= "{{ asset('assets/01-menu.png') }}"
-                class="icn menuicn" 
-                id="menuicn" 
+                class="icn menuicn"
+                id="menuicn"
                 alt="menu-icon">
         </div>
 
@@ -28,7 +28,7 @@
 
             <div class="dropdown">
                 <img src= "{{ asset('assets/03-user.png') }}"
-                    class="dpicn" 
+                    class="dpicn"
                     alt="dp">
               <div class="dropdown-content">
               <a href="#" id="logout-link">Log Out</a>
@@ -61,7 +61,7 @@
                             alt="dashboard">
                         <h3>Dashboard</h3>
                     </div>
-    
+
                     <script>
                         // Add event listener to redirect when clicked
                         document.getElementById('dashboard').addEventListener('click', function() {
@@ -81,7 +81,7 @@
                         window.location.href = "{{ route('admin.user-management') }}";
                     });
                 </script>
-                
+
                 <div class="nav-option option3" onclick="window.location.href='{{ route('reservation-handling.page') }}'">
                     <img src="{{ asset('assets/06-reservation.png') }}" class="nav-img" alt="report">
                     <h3> Reservation Handling</h3>
@@ -133,8 +133,8 @@
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="schoolID">
                                 School ID
                             </label>
-                            <input type="text" id="schoolID" value="{{ $admin->School_ID }}" 
-                                class="bg-gray-100 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight" 
+                            <input type="text" id="schoolID" value="{{ $admin->School_ID }}"
+                                class="bg-gray-100 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight"
                                 disabled>
                         </div>
 
@@ -171,8 +171,8 @@
                                 <label class="block text-gray-700 text-sm font-bold mb-2" for="suffix">
                                     Suffix
                                 </label>
-                                <input type="text" value="{{ $admin->Suffix }}" 
-                                    class="bg-gray-100 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight" 
+                                <input type="text" value="{{ $admin->Suffix }}"
+                                    class="bg-gray-100 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight"
                                     disabled>
                             </div>
                         </div>
@@ -182,8 +182,8 @@
                             <label class="block text-gray-700 text-sm font-bold mb-2" for="gender">
                                 Gender
                             </label>
-                            <input type="text" value="{{ ucfirst($admin->Gender) }}" 
-                                class="bg-gray-100 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight" 
+                            <input type="text" value="{{ ucfirst($admin->Gender) }}"
+                                class="bg-gray-100 appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight"
                                 disabled>
                         </div>
                     </div>
@@ -271,28 +271,67 @@
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
             const date = now.toLocaleDateString('en-US', options);
             const time = now.toLocaleTimeString('en-US');
-            
+
             document.getElementById('current-date').textContent = date;
             document.getElementById('current-time').textContent = time;
         }
-        
+
         setInterval(updateDateTime, 1000);
         updateDateTime();
 
         // Form submission handling
         document.getElementById('profile-form').addEventListener('submit', function(e) {
             e.preventDefault();
-            
+
             // Clear previous error messages
             document.querySelectorAll('.text-red-500').forEach(el => el.textContent = '');
-            
-            const formData = new FormData(this);
-            const data = {};
-            formData.forEach((value, key) => {
-                if (value.trim() !== '') {
-                    data[key] = value;
+
+            // Get form data
+            const formData = {
+                firstname: document.getElementById('firstname').value,
+                lastname: document.getElementById('lastname').value,
+                middlename: document.getElementById('middlename').value,
+                email: document.getElementById('email').value,
+                contactnum: document.getElementById('contactnum').value,
+                current_password: document.getElementById('current_password').value,
+                new_password: document.getElementById('new_password').value,
+                new_password_confirmation: document.getElementById('new_password_confirmation').value
+            };
+
+            // Remove empty password fields if not changing password
+            if (!formData.current_password && !formData.new_password && !formData.new_password_confirmation) {
+                delete formData.current_password;
+                delete formData.new_password;
+                delete formData.new_password_confirmation;
+            }
+
+            // Validate password fields if attempting to change password
+            if (formData.new_password || formData.current_password) {
+                if (!formData.current_password) {
+                    document.getElementById('current-password-error').textContent = 'Current password is required to change password';
+                    return;
                 }
-            });
+                if (!formData.new_password) {
+                    document.getElementById('new-password-error').textContent = 'New password is required';
+                    return;
+                }
+                if (!formData.new_password_confirmation) {
+                    document.getElementById('password-confirmation-error').textContent = 'Please confirm your new password';
+                    return;
+                }
+                if (formData.new_password !== formData.new_password_confirmation) {
+                    document.getElementById('password-confirmation-error').textContent = 'Passwords do not match';
+                    return;
+                }
+
+                // Password strength validation
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+                if (!passwordRegex.test(formData.new_password)) {
+                    document.getElementById('new-password-error').textContent =
+                        'Password must be at least 8 characters long and include uppercase, lowercase, number and special character';
+                    return;
+                }
+            }
 
             // Send AJAX request
             fetch('{{ route('admin.profile.update') }}', {
@@ -302,16 +341,27 @@
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
                     'Accept': 'application/json'
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(formData)
             })
             .then(response => response.json())
             .then(response => {
                 if (response.success) {
-                    showMessage(response.message, 'success');
+                    // Show success message
+                    showMessage(response.message || 'Profile updated successfully!', 'success');
+
                     // Clear password fields
                     document.getElementById('current_password').value = '';
                     document.getElementById('new_password').value = '';
                     document.getElementById('new_password_confirmation').value = '';
+
+                    // Update displayed values if needed
+                    if (response.user) {
+                        document.getElementById('firstname').value = response.user.FirstName;
+                        document.getElementById('lastname').value = response.user.LastName;
+                        document.getElementById('middlename').value = response.user.MiddleName || '';
+                        document.getElementById('email').value = response.user.Email;
+                        document.getElementById('contactnum').value = response.user.ContactNumber;
+                    }
                 } else {
                     if (response.errors) {
                         Object.entries(response.errors).forEach(([field, messages]) => {
@@ -321,7 +371,7 @@
                             }
                         });
                     }
-                    showMessage('Please correct the errors in the form.', 'error');
+                    showMessage(response.message || 'Please correct the errors in the form.', 'error');
                 }
             })
             .catch(error => {
@@ -329,22 +379,6 @@
                 showMessage('An error occurred while updating the profile.', 'error');
             });
         });
-
-        function showMessage(message, type) {
-            const container = document.getElementById('message-container');
-            const alert = document.createElement('div');
-            alert.className = `p-4 mb-4 rounded-lg ${
-                type === 'success' ? 'bg-green-100 text-green-700 border-l-4 border-green-500' :
-                type === 'error' ? 'bg-red-100 text-red-700 border-l-4 border-red-500' :
-                'bg-yellow-100 text-yellow-700 border-l-4 border-yellow-500'
-            }`;
-            alert.textContent = message;
-            
-            container.innerHTML = '';
-            container.appendChild(alert);
-            
-            setTimeout(() => alert.remove(), 5000);
-        }
     </script>
 </body>
 </html>

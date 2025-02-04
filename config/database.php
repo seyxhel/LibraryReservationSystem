@@ -99,20 +99,29 @@ return [
 
         'sqlsrv' => [
             'driver' => 'sqlsrv',
-            'host' => env('DB_HOST', 'localhost'),
+            'host' => env('DB_HOST', '127.0.0.1'),
             'port' => env('DB_PORT', '1433'),
-            'database' => env('DB_DATABASE', 'forge'),
+            'database' => env('DB_DATABASE', 'NewReservationSystem'),
             'username' => env('DB_USERNAME', ''),
             'password' => env('DB_PASSWORD', ''),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,
-            'trust_server_certificate' => true, // Add this if needed
+        ],
+
+        'books_db' => [
+            'driver' => 'sqlsrv',
+            'host' => env('DB_BOOKS_HOST', '127.0.0.1'),
+            'port' => env('DB_BOOKS_PORT', '1433'),
+            'database' => env('DB_BOOKS_DATABASE', 'Books_Inventory'),
+            'username' => env('DB_BOOKS_USERNAME',),
+            'password' => env('DB_BOOKS_PASSWORD',),
+            'charset' => 'utf8',
+            'prefix' => '',
             'options' => [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::SQLSRV_ATTR_QUERY_TIMEOUT => 10,
-                PDO::SQLSRV_ATTR_DIRECT_QUERY => true,
             ],
+            'trusted_connection' => true, // Enable Windows Authentication
         ],
     ],
 

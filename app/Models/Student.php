@@ -31,7 +31,8 @@ class Student extends Authenticatable
         'Program_ID',
         'ContactNumber',
         'Email',
-    ];    
+        'Overdue_status',
+    ];
 
     // Define the column to use for authentication
     protected $hidden = ['Password']; // Hide the password when serializing

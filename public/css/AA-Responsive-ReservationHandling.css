@@ -10,7 +10,7 @@
       margin-top: auto;
       padding-top: 20px;
     }
-  
+
     .nav-option h3 {
       font-size: 15px;
       gap: 20px;
@@ -26,8 +26,8 @@
       margin: 10px auto;
     }
   }
-  
-  
+
+
   @media screen and (max-width: 1300px) {
     .nav-img {
       height: 25px;
@@ -38,7 +38,7 @@
     .nav-logout {
       padding-top: 320px;
     }
-  
+
     .nav-option h3 {
       font-size: 15px;
     }
@@ -48,8 +48,8 @@
       width: 800px;
     }
   }
-  
-  
+
+
   @media screen and (max-width: 1200px) {
     .nav-img {
       height: 25px;
@@ -60,7 +60,7 @@
     .nav-logout {
       padding-top: 220px;
     }
-  
+
     .nav-option h3 {
       font-size: 15px;
     }
@@ -73,12 +73,12 @@
     .main {
       padding: 30px 20px;
     }
-    
+
     .report-body {
       overflow-x: auto;
       -webkit-overflow-scrolling: touch;
     }
-    
+
     .report-container {
       width: calc(100% - 40px);
       max-width: 1400px;
@@ -87,19 +87,19 @@
     table {
       width: 100px;
     }
-    
+
     .filter-container {
       flex-direction: column;
       align-items: flex-start;
     }
-    
+
     .filter-bar {
       width: 100%;
       justify-content: flex-start;
     }
   }
-  
-  
+
+
   @media screen and (max-width: 950px) {
       .nav-img {
         height: 25px;
@@ -110,7 +110,7 @@
       .nav-logout {
         padding-top: 90px;
       }
-  
+
       .nav-option h3 {
         font-size: 15px;
       }
@@ -120,7 +120,7 @@
         width: 800px;
       }
     }
-    
+
   @media screen and (max-width: 850px) {
     .nav-img {
       height: 30px;
@@ -178,44 +178,44 @@
     .main-container {
       margin-left: 0;
     }
-    
+
     .report-container {
       margin: 10px;
       padding: 0 10px;
     }
-    
+
     .nav {
       width: 100%;
       position: fixed;
       transform: translateX(-100%);
       transition: transform 0.3s ease;
     }
-    
+
     .nav.active {
       transform: translateX(0);
     }
-    
+
     .navcontainer {
       width: 100%;
     }
-    
+
     .searchbar2 {
       margin-bottom: 20px;
     }
-    
+
     .action-buttons {
       flex-wrap: wrap;
       gap: 5px;
     }
-    
+
     .action-buttons button {
       flex: 1 1 auto;
       min-width: 100px;
     }
-  
+
   }
-  
-  
+
+
   @media screen and (max-width: 490px) {
     .message {
       display: none;
@@ -261,31 +261,31 @@
       height: auto;
       padding: 15px;
     }
-    
+
     .title-Header {
       font-size: 20px;
     }
-    
+
     .filter-bar {
       flex-direction: column;
       gap: 10px;
     }
-    
+
     .filter-bar select {
       width: 100%;
     }
-    
+
     .action-buttons button {
       width: 100%;
       margin: 5px 0;
     }
-    
+
     table td, table th {
       padding: 8px;
       font-size: 14px;
     }
   }
-  
+
   @media screen and (max-width: 400px) {
     .title-Header {
       font-size: 17px;
@@ -303,7 +303,7 @@
       height: 20px;
     }
   }
-  
+
   @media screen and (max-width: 320px) {
     .title-Header {
       font-size: 18px;
@@ -355,13 +355,13 @@
       padding: 6px;
       font-size: 12px;
     }
-    
+
     .searchbar2 input {
       width: 100%;
       max-width: 200px;
     }
   }
-  
+
   @media print {
     .nav,
     .searchbar,
@@ -369,15 +369,54 @@
     .action-buttons {
       display: none;
     }
-    
+
     .main-container {
       margin: 0;
       padding: 0;
     }
-    
+
     .report-container {
       box-shadow: none;
       margin: 0;
       padding: 0;
     }
   }
+
+  .action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.confirm-btn {
+    background-color: #4CAF50;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.cancel-btn {
+    background-color: #ff9800;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+    padding: 6px 12px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.confirm-btn:disabled,
+.cancel-btn:disabled,
+.delete-btn:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}

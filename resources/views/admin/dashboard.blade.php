@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible"
           content="IE=edge">
-    <meta name="viewport" 
-          content="width=device-width, 
+    <meta name="viewport"
+          content="width=device-width,
                    initial-scale=1.0">
     <title>UNIARCHIVE - ADMIN Home</title>
     <!-- In your blade template (e.g., resources/views/layouts/app.blade.php) -->
@@ -36,20 +36,20 @@
     </style>
 </head>
 <body>
-  
+
     <!-- for header part -->
     <header>
         <div class="logosec">
             <div class="logo">UNIARCHIVE</div>
             <img src= "{{ asset('assets/01-menu.png') }}"
-                class="icn menuicn" 
-                id="menuicn" 
+                class="icn menuicn"
+                id="menuicn"
                 alt="menu-icon">
         </div>
 
         <div class="dropdown">
             <img src= "{{ asset('assets/03-user.png') }}"
-                class="dpicn" 
+                class="dpicn"
                 alt="dp">
           <div class="dropdown-content">
               <a href="{{ route('admin.profile') }}">Edit Account</a>
@@ -78,7 +78,7 @@
             <nav class="nav">
                 <div class="nav-option option1">
                     <img src="{{ asset('assets/04-dashboard.png') }}"
-                        class="nav-img" 
+                        class="nav-img"
                         alt="dashboard">
                     <h3> Dashboard</h3>
                 </div>
@@ -95,7 +95,7 @@
                         window.location.href = "{{ route('admin.user-management') }}";
                     });
                 </script>
-                
+
                 <div class="nav-option option3" onclick="window.location.href='{{ route('reservation-handling.page') }}'">
                     <img src="{{ asset('assets/06-reservation.png') }}" class="nav-img" alt="report">
                     <h3> Reservation Handling</h3>
@@ -120,11 +120,11 @@
                 </script>
             </nav>
         </div>
-            
+
         <!--BODY CONTENT PAGE-->
         <div class="main">
             <div class="dashboard-title">
-                    Welcome, ADMIN.
+                    Welcome, {{ Auth::guard('admin')->user()->FirstName }}.
                 <div class="date-time">
                     <span id="current-date"></span>
                     <span id="current-time"></span>
@@ -132,11 +132,11 @@
             </div>
 
             <div class="dashboard-layout"></div>
-                <div class="stats-graph-container"> 
+                <div class="stats-graph-container">
                     <div class="box-container">
                         <div class="box box1">
                             <div class="text">
-                                <h2 class="topic-heading">891</h2>
+                                <h2 class="topic-heading">{{ $totalReservedBooks }}</h2>
                                 <h2 class="topic">Total Reserved Books</h2>
                             </div>
                             <img src= "{{ asset('assets/08-bookmark.png') }}"
@@ -144,7 +144,7 @@
                         </div>
                         <div class="box box2">
                             <div class="text">
-                                <h2 class="topic-heading">1350</h2>
+                                <h2 class="topic-heading">{{ $totalAvailableBooks }}</h2>
                                 <h2 class="topic">Total of Books Available</h2>
                             </div>
                             <img src= "{{ asset('assets/11-available.png') }}" alt="published">
@@ -154,15 +154,14 @@
                     <!-- Graph Container -->
                     <div class="graph-container">
                         <div class="chart container">
-                            <canvas id="bookReservationsChart"></canvas> <!-- Placeholder for the graph -->
+                            <canvas id="bookReservationsChart"></canvas>
                         </div>
                     </div>
                 </div>
-
                     <!-- Main Content (List of Research Books) -->
                 <div class="main-content">
-                    <div class="table-container">             
-                        <h1 class="title-Header">List of All Research Books</h1>
+                    <div class="table-container">
+                        <h1 class="title-Header">List of All Research Book Categories</h1>
                         <div class="scrollable-list">
                             <ul class="research-list">
                                 <li>Descriptive Studies</li>
@@ -186,7 +185,7 @@
                                 <li>Experimental Research</li>
                                 <li>Non-Experimental Research</li>
                             </ul>
-                        </div>  
+                        </div>
                     </div>
                 </div>
             </div>
@@ -197,143 +196,72 @@
     <script>
         function updateDateTime() {
             const now = new Date();
-            
+
             const options = { year: 'numeric', month: 'long', day: 'numeric' };
             const date = now.toLocaleDateString('en-US', options);
-            
+
             // Format the time
             const time = now.toLocaleTimeString('en-US');
-            
+
             document.getElementById('current-date').textContent = date;
             document.getElementById('current-time').textContent = time;
         }
-    
+
         setInterval(updateDateTime, 1000);
         window.onload = updateDateTime;
     </script>
     <script>
-        const ctx = document.getElementById('bookReservationsChart').getContext('2d');
-        
-        // Create vibrant primary gradient
-        const primaryGradient = ctx.createLinearGradient(0, 0, 0, 400);
-        primaryGradient.addColorStop(0, 'rgba(255, 107, 107, 0.8)');    // Coral red
-        primaryGradient.addColorStop(0.5, 'rgba(255, 159, 67, 0.8)');   // Orange
-        primaryGradient.addColorStop(1, 'rgba(255, 205, 86, 0.8)');     // Yellow
+        document.addEventListener("DOMContentLoaded", function () {
+            fetch("{{ url('/admin/weekly-reservations') }}")
+                .then(response => response.json())
+                .then(data => {
+                    const labels = [];
+                    const reservationsData = [];
 
-        // Create hover gradient
-        const hoverGradient = ctx.createLinearGradient(0, 0, 0, 400);
-        hoverGradient.addColorStop(0, 'rgba(255, 107, 107, 1)');       // Brighter coral
-        hoverGradient.addColorStop(0.5, 'rgba(255, 159, 67, 1)');      // Brighter orange
-        hoverGradient.addColorStop(1, 'rgba(255, 205, 86, 1)');        // Brighter yellow
+                    data.forEach(entry => {
+                        labels.push(entry.date);
+                        reservationsData.push(entry.count);
+                    });
 
-        // Secondary gradient for lower values
-        const secondaryGradient = ctx.createLinearGradient(0, 0, 0, 400);
-        secondaryGradient.addColorStop(0, 'rgba(46, 213, 115, 0.8)');   // Green
-        secondaryGradient.addColorStop(0.5, 'rgba(86, 203, 249, 0.8)'); // Blue
-        secondaryGradient.addColorStop(1, 'rgba(68, 189, 255, 0.8)');   // Light blue
+                    const ctx = document.getElementById('bookReservationsChart').getContext('2d');
 
-        new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    label: 'Book Reservations',
-                    data: [450, 580, 690, 850, 780, 600, 520, 750, 820, 900, 850, 780],
-                    backgroundColor: function(context) {
-                        const index = context.dataIndex;
-                        const value = context.dataset.data[index];
-                        return value > 700 ? primaryGradient : secondaryGradient;
-                    },
-                    hoverBackgroundColor: hoverGradient,
-                    borderWidth: 2,
-                    borderColor: function(context) {
-                        return context.active ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.1)';
-                    },
-                    borderRadius: 8,
-                    barPercentage: 0.75,
-                    transition: 'all 0.3s ease'
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    title: {
-                        display: true,
-                        text: 'Monthly Book Reservations (2024)',
-                        font: {
-                            size: 22,
-                            weight: 'bold',
-                            family: 'Arial'
+                    new Chart(ctx, {
+                        type: 'bar',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Weekly Reservations (Mon-Sat)',
+                                data: reservationsData,
+                                backgroundColor: 'rgba(255, 99, 132, 0.5)',
+                                borderColor: 'rgba(255, 99, 132, 1)',
+                                borderWidth: 1
+                            }]
                         },
-                        padding: 20,
-                        color: '#2c3e50'
-                    },
-                    legend: {
-                        display: false
-                    },
-                    tooltip: {
-                        backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                        titleFont: {
-                            size: 16
-                        },
-                        bodyFont: {
-                            size: 14
-                        },
-                        padding: 15,
-                        displayColors: false,
-                        callbacks: {
-                            label: function(context) {
-                                return `📚 ${context.parsed.y} books reserved`;
-                            }
-                        },
-                        animation: {
-                            duration: 150
-                        }
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        max: 1000,
-                        grid: {
-                            color: 'rgba(0, 0, 0, 0.05)',
-                            drawBorder: false
-                        },
-                        ticks: {
-                            font: {
-                                size: 12
+                        options: {
+                            responsive: true,
+                            plugins: {
+                                title: {
+                                    display: true,
+                                    text: 'Weekly Book Reservations (Monday to Saturday)'
+                                },
+                                legend: {
+                                    display: false
+                                }
                             },
-                            stepSize: 200,
-                            callback: function(value) {
-                                return value + ' 📚';
+                            scales: {
+                                y: {
+                                    beginAtZero: true,
+                                    max: 100,
+                                    ticks: {
+                                        stepSize: 10
+                                    }
+                                }
                             }
                         }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        },
-                        ticks: {
-                            font: {
-                                size: 12,
-                                weight: 'bold'
-                            },
-                            color: '#2c3e50'
-                        }
-                    }
-                },
-                animation: {
-                    duration: 2000,
-                    easing: 'easeInOutQuart',
-                    delay: function(context) {
-                        return context.dataIndex * 100;
-                    }
-                },
-                onHover: (event, elements) => {
-                    event.native.target.style.cursor = elements[0] ? 'pointer' : 'default';
-                }
-            }
+                    });
+                });
         });
     </script>
+
 </body>
 </html>

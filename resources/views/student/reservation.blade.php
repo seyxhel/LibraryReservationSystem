@@ -55,7 +55,7 @@
                 </div>
 
         </div>
-          
+
         <div class="main_container">
             <div class="sidebar">
                 <div class="sidebar__inner">
@@ -76,7 +76,7 @@
                       </a>
                     </li>
                   </ul>
-                  
+
                 </div>
             </div>
 
@@ -90,17 +90,17 @@
               <script>
                 function updateDateTime() {
                     const now = new Date();
-                    
+
                     const options = { year: 'numeric', month: 'long', day: 'numeric' };
                     const date = now.toLocaleDateString('en-US', options);
-                    
+
                     // Format the time
                     const time = now.toLocaleTimeString('en-US');
-                    
+
                     document.getElementById('current-date').textContent = date;
                     document.getElementById('current-time').textContent = time;
                 }
-            
+
                 setInterval(updateDateTime, 1000);
                 window.onload = updateDateTime;
             </script>
@@ -113,263 +113,261 @@
                 <option value="value">""</option>
               </select>
             </div>
+<!-- Navigation Tabs -->
+ <!-- Navigation and Table Structure -->
+ <nav class="navigation-bar">
+    <ul>
+        <li><a href="#" id="all-books" class="active">All</a></li>
+        <li><a href="#" id="reserved-books">Reserved Books</a></li>
+        <li><a href="#" id="returned-books">Returned Books</a></li>
+        <li><a href="#" id="overtime-books">Overtime Books</a></li>
+    </ul>
+  </nav>
 
-               <!---DITOBETLOG-->
-                <!-- Navigation Tabs -->
+  <!-- Add CSRF Token for Laravel -->
+  <meta name="csrf-token" content="{{ csrf_token() }}">
 
-              <!-- Navigation Tabs -->
-              <nav class="navigation-bar">
-                <ul>
-                    <li><a href="#" id="all-books" class="active">All</a></li>
-                    <li><a href="#" id="reserved-books">Reserved Books</a></li>
-                    <li><a href="#" id="returned-books">Returned Books</a></li>
-                    <li><a href="#" id="overtime-books">Overtime Books</a></li>
-                </ul>
-              </nav>
+  <div class="content-container">
+    <!-- All Books Container -->
+    <div id="all-books-container" class="content active">
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Research Title</th>
+                        <th>Reservation Date</th>
+                        <th>Reserved Until</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </main>
+    </div>
 
-              <div class="content-container">
-                <!-- All Books Container -->
-                <div id="all-books-container" class="content active">
-                  <main>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Research Title</th>
-                          <th>Researchers</th> <!-- Changed from Author -->
-                          <th>Reservation Date</th>
-                          <th>Reserved Until</th>
-                          <th>Status</th>
-                          <th>Action</th> <!-- New column for View button -->
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </main>
-                </div>
-              
-                <!-- Reserved Books Container -->
-                <div id="reserved-books-container" class="content">
-                  <main>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Research Title</th>
-                          <th>Researchers</th>
-                          <th>Reservation Date</th>
-                          <th>Time Slot</th>
-                          <th>Reserved Until</th>
-                          <th>Action</th> <!-- New column for View button -->
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </main>
-                </div>
-              
-                <!-- Returned Books Container -->
-                <div id="returned-books-container" class="content">
-                  <main>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Research Title</th>
-                          <th>Researchers</th>
-                          <th>Reservation Date</th>
-                          <th>Reserved Until</th>
-                          <th>Action</th> <!-- New column for View button -->
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </main>
-                </div>
-              
-                <!-- Overtime Books Container -->
-                <div id="overtime-books-container" class="content">
-                  <main>
-                    <table>
-                      <thead>
-                        <tr>
-                          <th>Research Title</th>
-                          <th>Researchers</th>
-                          <th>Reservation Date</th>
-                          <th>Reserved Until</th>
-                          <th>Time Overdue</th>
-                          <th>Action</th> <!-- New column for View button -->
-                        </tr>
-                      </thead>
-                      <tbody></tbody>
-                    </table>
-                  </main>
-                </div>
+    <!-- Reserved Books Container -->
+    <div id="reserved-books-container" class="content">
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Research Title</th>
+                        <th>Reservation Date</th>
+                        <th>Time Slot</th>
+                        <th>Reserved Until</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </main>
+    </div>
 
-              <!-- Container to show reservation details -->
-                  <div id="container-view" style="display: none;">
-                    <div class="view-content">
-                      <h2 id="view-title"></h2>
-                      <p id="view-category"></p>
-                      <p id="view-researcher"></p>
-                      <p id="view-reservation-date"></p>
-                      <p id="view-status"></p>
-                      <p id="view-abstract"></p>
-                      <button id="close-view-button">Close</button>
-                    </div>
-                  </div>
+    <!-- Returned Books Container -->
+    <div id="returned-books-container" class="content">
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Research Title</th>
+                        <th>Reservation Date</th>
+                        <th>Reserved Until</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </main>
+    </div>
 
-                <script>
-                // Handle close button for the container-view
-                document.getElementById("close-view-button").addEventListener("click", () => {
-                  document.getElementById("container-view").style.display = "none";
-                });
+    <!-- Overtime Books Container (Removed "Time Overdue" column) -->
+    <div id="overtime-books-container" class="content">
+        <main>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Research Title</th>
+                        <th>Reservation Date</th>
+                        <th>Reserved Until</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </main>
+    </div>
 
-                // Function to populate and open the container-view
-                function showReservationDetails(data) {
-                  document.getElementById("view-title").textContent = data.title || data.bookTitle || "Reservation Details";
-                  document.getElementById("view-researcher").textContent = `Researcher(s): ${data.researcher || "N/A"}`;
-                  document.getElementById("view-reservation-date").textContent = `Reservation Date: ${data.reservationDate || "N/A"}`;
-                  document.getElementById("view-status").textContent = `Status: ${data.status || "N/A"}`;
-                  document.getElementById("view-abstract").textContent = `Abstract: ${data.abstract || "N/A"}`;
+    <!-- Container to show reservation details -->
+    <div id="container-view" style="display: none;">
+        <div class="view-content">
+            <h2 id="view-title"></h2>
+            <p id="view-category"></p>
+            <p id="view-reservation-date"></p>
+            <p id="view-status"></p>
+            <p id="view-abstract"></p>
+            <button id="close-view-button">Close</button>
+        </div>
+    </div>
 
-                  document.getElementById("container-view").style.display = "flex";
+    <script>
+        // Handle close button for the container-view
+        document.getElementById("close-view-button").addEventListener("click", () => {
+            document.getElementById("container-view").style.display = "none";
+        });
+
+        // Function to populate and open the container-view with reservation details
+        function showReservationDetails(data) {
+            document.getElementById("view-title").textContent = data.title;
+            document.getElementById("view-reservation-date").textContent = `Reservation Date: ${data.reservationDate}`;
+            document.getElementById("view-status").textContent = `Status: ${data.status || 'N/A'}`;
+
+            document.getElementById("container-view").style.display = "flex";
+        }
+
+        // JavaScript to handle tab switching and fetching data when relevant tab is selected
+        const navLinks = document.querySelectorAll(".navigation-bar a");
+        const contentContainers = document.querySelectorAll(".content");
+
+        navLinks.forEach((link) => {
+            link.addEventListener("click", async (e) => {
+                e.preventDefault();
+
+                // Remove 'active' class from all links and hide all containers
+                navLinks.forEach((nav) => nav.classList.remove("active"));
+                contentContainers.forEach((container) => container.classList.remove("active"));
+
+                // Add 'active' class to the clicked link and its corresponding container
+                link.classList.add("active");
+                const targetContainer = document.getElementById(`${link.id}-container`);
+                if (targetContainer) {
+                    targetContainer.classList.add("active");
+
+                    // Fetch reservations when the relevant tab is clicked
+                    if (link.id === 'reserved-books') {
+                        await fetchReservedBooks();
+                    } else if (link.id === 'all-books') {
+                        await fetchReservations();
+                    }
                 }
-                </script>
+            });
+        });
 
-                <script>
-                  // JavaScript to handle tab switching
-                  const navLinks = document.querySelectorAll(".navigation-bar a");
-                  const contentContainers = document.querySelectorAll(".content");
-              
-                  navLinks.forEach((link) => {
-                    link.addEventListener("click", (e) => {
-                      e.preventDefault();
-              
-                      // Remove 'active' class from all links and hide all containers
-                      navLinks.forEach((nav) => nav.classList.remove("active"));
-                      contentContainers.forEach((container) => container.classList.remove("active"));
-              
-                      // Add 'active' class to the clicked link and its corresponding container
-                      link.classList.add("active");
-                      const targetContainer = document.getElementById(`${link.id}-container`);
-                      if (targetContainer) {
-                        targetContainer.classList.add("active");
-                      }
-                    });
-                  });
-              
-                  // Set default content visibility
-                  document.getElementById("all-books-container").classList.add("active");
-              
-                // Sample data for each table with added "category" field
-                const allBooksData = [
-                  { title: "The Great Gatsby", category: "Literature", researcher: "F. Scott Fitzgerald", reservationDate: "01-10-2025", status: "Returned" },
-                  { title: "1984", category: "Dystopian", researcher: "George Orwell", reservationDate: "01-12-2025", status: "Reserved" },
-                  { title: "To Kill a Mockingbird", category: "Literature", researcher: "Harper Lee", reservationDate: "02-16-2025", status: "Overtime" },
-                ];
+        // Function to populate tables with data
+        function populateTable(containerId, data, columns) {
+            const container = document.getElementById(containerId);
+            if (container) {
+                const tbody = container.querySelector("tbody");
+                tbody.innerHTML = '';
 
-                const reservedBooksData = [
-                  { bookTitle: "1984", category: "Dystopian", researcher: "Alice", reservationDate: "01-10-2025" },
-                  { bookTitle: "Pride and Prejudice", category: "Literature", researcher: "Bob", reservationDate: "01-22-2025" },
-                ];
+                data.forEach((row) => {
+                    const tr = document.createElement("tr");
 
-                const returnedBooksData = [
-                  { bookTitle: "The Great Gatsby", category: "Literature", researcher: "Charlie", reservationDate: "06-21-2025" },
-                  { bookTitle: "The Catcher in the Rye", category: "Literature", researcher: "Diana", reservationDate: "12-24-2025" },
-                ];
-
-                const overtimeBooksData = [
-                  { bookTitle: "Moby Dick", category: "Adventure", researcher: "Eve", reservationDate: "06-21-2025", returnDate: "06-21-2025", daysOverdue: 5 },
-                  { bookTitle: "War and Peace", category: "Historical", researcher: "Frank", reservationDate: "06-21-2025", returnDate: "06-21-2025", daysOverdue: 3 },
-                ];
-
-                // Function to populate a table with a "View" button
-                function populateTable(containerId, data, columns) {
-                  const container = document.getElementById(containerId);
-                  if (container) {
-                    const tbody = container.querySelector("tbody");
-                    data.forEach((row) => {
-                      const tr = document.createElement("tr");
-
-                      // Add columns to the row
-                      columns.forEach((column) => {
+                    // Add columns to the row
+                    columns.forEach((column) => {
                         const td = document.createElement("td");
                         td.textContent = row[column];
 
-                        // Add a class for "status" or other columns as necessary
-                        if (column === "status" || column === "reservationDate" || column === "returnDate") {
-                          td.classList.add(row[column].toLowerCase());
+                        if (column === "status") {
+                            td.classList.add(row[column].toLowerCase());
                         }
 
                         tr.appendChild(td);
-                      });
-
-                      // Add View button
-                      const viewTd = document.createElement("td");
-                      const viewButton = document.createElement("button");
-                      viewButton.textContent = "View";
-                      viewButton.classList.add("view-button");
-
-                      viewTd.appendChild(viewButton);
-                      tr.appendChild(viewTd);
-                      tbody.appendChild(tr);
                     });
-                  }
+
+                    // Add View button
+                    const viewTd = document.createElement("td");
+                    const viewButton = document.createElement("button");
+                    viewButton.textContent = "View";
+                    viewButton.classList.add("view-button");
+
+                    viewButton.addEventListener("click", () => showReservationDetails(row));
+
+                    viewTd.appendChild(viewButton);
+                    tr.appendChild(viewTd);
+                    tbody.appendChild(tr);
+                });
+            }
+        }
+
+        // Function to fetch all reservations from the server
+        async function fetchReservations() {
+            try {
+                const response = await fetch('/student/reservations/all', {
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+
+                if (!response.ok) throw new Error('Network response was not ok');
+
+                const data = await response.json();
+
+                // Populate each table with the fetched data
+                populateTable("all-books-container", data.all, [
+                    "title", "reservationDate", "reservedUntil", "status"
+                ]);
+                populateTable("reserved-books-container", data.reserved, [
+                    "title", "reservationDate", "timeSlot", "reservedUntil"
+                ]);
+                populateTable("returned-books-container", data.returned, [
+                    "title", "reservationDate", "reservedUntil"
+                ]);
+                populateTable("overtime-books-container", data.overtime, [
+                    "title", "reservationDate", "reservedUntil"
+                ]);
+
+            } catch (error) {
+                console.error('Error fetching reservations:', error);
+                alert('Failed to load reservations. Please try again later.');
+            }
+        }
+
+        // Function to fetch reserved books from the server
+        async function fetchReservedBooks() {
+            try {
+                const response = await fetch('/student/reservations/reserved', {
+                    headers: {
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content
+                    }
+                });
+
+                if (!response.ok) throw new Error('Network response was not ok');
+
+                const result = await response.json();
+
+                if (result.success) {
+                    populateTable("reserved-books-container", result.data, [
+                        "title", "reservationDate", "timeSlot", "reservedUntil"
+                    ]);
+                } else {
+                    throw new Error(result.message || 'Failed to fetch reserved books');
                 }
 
-                // Populate the tables with data and add View button
-                populateTable("all-books-container", allBooksData, ["title", "category", "researcher", "reservationDate", "status"]);
-                populateTable("reserved-books-container", reservedBooksData, ["bookTitle", "category", "researcher", "reservationDate"]);
-                populateTable("returned-books-container", returnedBooksData, ["bookTitle", "category", "researcher", "reservationDate"]);
-                populateTable("overtime-books-container", overtimeBooksData, ["bookTitle", "category", "researcher", "reservationDate", "returnDate", "daysOverdue"]);
+            } catch (error) {
+                console.error('Error fetching reserved books:', error);
+                alert('Failed to load reserved books. Please try again later.');
+            }
+        }
 
-                  function populateTable(containerId, data, columns) {
-                    const container = document.getElementById(containerId);
-                    if (container) {
-                      const tbody = container.querySelector("tbody");
-                      data.forEach((row) => {
-                        const tr = document.createElement("tr");
-                  
-                        // Add columns to the row
-                        columns.forEach((column) => {
-                          const td = document.createElement("td");
-                          td.textContent = row[column];
-                          
-                          if (column === "status") {
-                            // Add a class to the status column based on the status value
-                            td.classList.add(row[column].toLowerCase());
-                          }
-                  
-                          tr.appendChild(td);
-                        });
+        // Set default content visibility and fetch data when page loads
+        document.addEventListener('DOMContentLoaded', async () => {
+            document.getElementById("all-books-container").classList.add("active");
+            await fetchReservations();
+            await fetchReservedBooks();
+        });
 
-                  
-                        // Add the "View" button
-                        const viewTd = document.createElement("td");
-                        const viewButton = document.createElement("button");
-                        viewButton.textContent = "View";
-                        viewButton.classList.add("view-button");
-
-                        // Attach click event to "View" button to show reservation details
-                        viewButton.addEventListener("click", () => showReservationDetails(row));
-
-                        viewTd.appendChild(viewButton);
-                        tr.appendChild(viewTd);
-                        tbody.appendChild(tr);
-                        
-                      });
-                    }
-                  }
-                </script>
-                
-            </div>
-
-        </div>
+        // Optional: Auto-refresh every 5 minutes
+        setInterval(fetchReservations, 300000);
+  </script>
+</div>
 
         <div class="profile-container" id="profile-section">
           <!-- Close button -->
           <button class="close-btn" onclick="toggleProfile()">×</button>
 
           <h2>View Profile</h2>
-      
+
           <!-- Form with aligned text boxes -->
 <form>
     <div class="four-forms">
@@ -399,23 +397,23 @@
 <div class="two-forms">
     <div class="input-box">
         <label for="gender">Gender:</label>
-        <input type="text" class="input-field" id="gender" placeholder="Gender" 
-            value="{{ $student->Gender == 'male' ? 'Male' : ($student->Gender == 'female' ? 'Female' : ($student->Gender == 'other' ? 'Other' : 'Prefer not to say')) }}" 
+        <input type="text" class="input-field" id="gender" placeholder="Gender"
+            value="{{ $student->Gender == 'male' ? 'Male' : ($student->Gender == 'female' ? 'Female' : ($student->Gender == 'other' ? 'Other' : 'Prefer not to say')) }}"
             readonly>
         <i class="bx bx-chevron-down"></i>
     </div>
 
     <div class="input-box">
         <label for="program">College Program:</label>
-        <input type="text" class="input-field" id="program" placeholder="College Program" 
-            value="{{ 
-                $student->Program_ID == 1 ? 'Information Technology' : 
-                ($student->Program_ID == 2 ? 'Home Economics' : 
-                ($student->Program_ID == 3 ? 'Information Communication and Technology' : 
-                ($student->Program_ID == 4 ? 'Human Resource Management' : 
-                ($student->Program_ID == 5 ? 'Marketing Management' : 
-                ($student->Program_ID == 6 ? 'Entrepreneurship' : 
-                ($student->Program_ID == 7 ? 'Fiscal Administration' : 'Office Management Technology')))))) 
+        <input type="text" class="input-field" id="program" placeholder="College Program"
+            value="{{
+                $student->Program_ID == 1 ? 'Information Technology' :
+                ($student->Program_ID == 2 ? 'Home Economics' :
+                ($student->Program_ID == 3 ? 'Information Communication and Technology' :
+                ($student->Program_ID == 4 ? 'Human Resource Management' :
+                ($student->Program_ID == 5 ? 'Marketing Management' :
+                ($student->Program_ID == 6 ? 'Entrepreneurship' :
+                ($student->Program_ID == 7 ? 'Fiscal Administration' : 'Office Management Technology'))))))
             }}" s
             readonly>
         <i class="bx bx-chevron-down"></i>
@@ -434,7 +432,7 @@
         <label for="email">E-mail Address:</label>
         <input type="email" class="input-field" id="email" placeholder="E-mail Address" value="{{ $student->Email }}" readonly>
         <i class="bx bx-envelope"></i>
-    </div>                
+    </div>
 
                 <div class="button-group">
                   <button class="btn btn-change" type="button" onclick="toggleChangePassword()">Change Password</button>
@@ -445,7 +443,7 @@
               </form>
 
             </div>
-            
+
             <div class="profile-container" id="change-password-section" style="display: none;">
             <button class="close-btn" onclick="toggleChangePassword()">×</button>
 
@@ -543,7 +541,6 @@
             }
     }
 </script>
-
         <script>
           // JavaScript to toggle the visibility of the profile section
           function toggleProfile() {
@@ -555,7 +552,7 @@
               }
           }
         </script>
-        
+
       </div>
 
 </body>

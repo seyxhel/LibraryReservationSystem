@@ -1,8 +1,8 @@
 <?php
 // Database connection parameters
-$serverName = "DESKTOP-H98F7H6\SQLEXPRESS"; // or your server name
+$serverName = "WIN-DRJ0QUA8KCP\SQLEXPRESS"; // or your server name
 $connectionOptions = array(
-    "Database" => "NewResrvationSystem", // replace with your database name
+    "Database" => "NewReservationSystem", // replace with your database name
     "Uid" => "", // replace with your username
     "PWD" => ""  // replace with your password
 );

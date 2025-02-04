@@ -4,7 +4,7 @@ function updateDateTime() {
     const options = { year: 'numeric', month: 'long', day: 'numeric' };
     const date = now.toLocaleDateString('en-US', options);
     const time = now.toLocaleTimeString('en-US');
-    
+
     document.getElementById('current-date').textContent = date;
     document.getElementById('current-time').textContent = time;
 }
@@ -33,7 +33,7 @@ function closeModal(modalId) {
 // Status dropdown creation function
 function createStatusDropdown(status) {
     return `
-        <select class="status-select ${status.toLowerCase() === 'active' ? 'active' : 'inactive'} px-3 py-1 rounded-md cursor-pointer appearance-none focus:outline-none text-white font-medium" 
+        <select class="status-select ${status.toLowerCase() === 'active' ? 'active' : 'inactive'} px-3 py-1 rounded-md cursor-pointer appearance-none focus:outline-none text-white font-medium"
                 onchange="updateAdminStatus(this)">
             <option value="ACTIVE" ${status.toUpperCase() === 'ACTIVE' ? 'selected' : ''}>ACTIVE</option>
             <option value="INACTIVE" ${status.toUpperCase() === 'INACTIVE' ? 'selected' : ''}>INACTIVE</option>
@@ -48,7 +48,7 @@ async function loadAdminTable() {
         console.error('Table body element not found');
         return;
     }
-    
+
     try {
         console.log('Fetching admin data...');
         const response = await fetch('/admin/get-admins', {
@@ -58,7 +58,7 @@ async function loadAdminTable() {
             }
         });
         console.log('Response status:', response.status);
-        
+
         if (!response.ok) {
             const errorText = await response.text();
             console.error('Response not ok:', errorText);
@@ -67,7 +67,7 @@ async function loadAdminTable() {
 
         const admins = await response.json();
         console.log('Received admin data:', admins);
-        
+
         tableBody.innerHTML = '';
         admins.forEach(admin => {
             const row = document.createElement('tr');
@@ -78,7 +78,7 @@ async function loadAdminTable() {
             row.dataset.suffix = admin.Suffix || '';
             row.dataset.gender = admin.Gender || '';
             row.dataset.contactNum = admin.ContactNumber || '';
-            
+
             row.innerHTML = `
                 <td>${admin.School_ID || ''}</td>
                 <td>${admin.Email || ''}</td>
@@ -109,17 +109,31 @@ async function loadStudentData() {
         if (!response.ok) throw new Error('Failed to fetch students');
 
         const students = await response.json();
+        console.log('Fetched students:', students); // ✅ Debug log
+
         const tableBody = document.getElementById('studentTableBody');
         tableBody.innerHTML = '';
 
         students.forEach(student => {
+            console.log('Processing student:', student); // ✅ Debug each student
+
             const row = document.createElement('tr');
+
+            row.dataset.schoolId = student.School_ID || 'N/A';
+            row.dataset.email = student.Email || 'N/A';
+            row.dataset.firstName = student.FirstName || 'N/A';
+            row.dataset.middleName = student.MiddleName || 'N/A';
+            row.dataset.surname = student.LastName || 'N/A';
+            row.dataset.suffix = student.Suffix || 'N/A';
+            row.dataset.gender = student.Gender || 'N/A';
+            row.dataset.contactNum = student.ContactNumber || 'N/A';
+
             row.innerHTML = `
-                <td>${student.School_ID}</td>
-                <td>${student.Email}</td>
-                <td>${student.Name}</td>
+                <td>${student.School_ID || 'N/A'}</td>
+                <td>${student.Email || 'N/A'}</td>
+                <td>${student.FirstName || ''} ${student.LastName || ''}</td>
                 <td>
-                    <button class="view-btn" onclick="viewStudent('${student.School_ID}')">View Student</button>
+                    <button class="view-btn" onclick="viewStudent(this)">View or Change Student Password</button>
                 </td>
             `;
             tableBody.appendChild(row);
@@ -134,14 +148,14 @@ async function updateAdminStatus(select) {
     try {
         const newStatus = select.value;
         const row = select.closest('tr');
-        const schoolId = row.cells[0].textContent;
+        const adminId = row.dataset.adminId; // Ensure dataset.adminId is present
 
         // Show loading state
         const originalColor = select.style.backgroundColor;
         select.style.backgroundColor = '#ccc';
         select.disabled = true;
 
-        const response = await fetch(`/admin/update-status/${schoolId}`, {
+        const response = await fetch(`/admin/update-status/${adminId}`, {  // Use Admin_ID instead
             method: 'POST',
             headers: {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
@@ -216,26 +230,41 @@ window.viewAdmin = function(button) {
 };
 
 // View student function
-window.viewStudent = async function(schoolID) {
-    try {
-        const response = await fetch(`/get-student/${schoolID}`);
-        if (!response.ok) throw new Error('Failed to fetch student details');
-
-        const student = await response.json();
-
-        document.getElementById('viewStudentID').textContent = student.School_ID || '';
-        document.getElementById('viewStudentEmail').textContent = student.Email || '';
-        document.getElementById('viewStudentFirstName').textContent = student.FirstName || '';
-        document.getElementById('viewStudentMiddleName').textContent = student.MiddleName || 'N/A';
-        document.getElementById('viewStudentSurname').textContent = student.LastName || '';
-        document.getElementById('viewStudentSuffix').textContent = student.Suffix || 'N/A';
-        document.getElementById('viewStudentGender').textContent = student.Gender || '';
-        document.getElementById('viewStudentContactNum').textContent = student.ContactNumber || '';
-
-        openModal('viewStudentModal');
-    } catch (error) {
-        console.error('Error fetching student details:', error);
+window.viewStudent = function(button) {
+    const row = button.closest('tr');
+    if (!row) {
+        console.error('Could not find the row.');
+        return;
     }
+
+    console.log('Row dataset:', row.dataset); // ✅ Debug row dataset
+
+    const viewStudentModal = document.getElementById('viewStudentModal');
+    if (!viewStudentModal) {
+        console.error('View Student Modal not found.');
+        return;
+    }
+
+    const studentEmail = row.dataset.email || 'N/A';
+
+    // Update the change password button with the correct email
+    const changePasswordBtn = viewStudentModal.querySelector('button[onclick*="openChangePasswordModal"]');
+    if (changePasswordBtn) {
+        changePasswordBtn.setAttribute('onclick', `openChangePasswordModal('${studentEmail}')`);
+    }
+
+    // Populate modal fields
+    document.getElementById('viewStudentID').textContent = row.dataset.schoolId || 'N/A';
+    document.getElementById('viewStudentEmail').textContent = studentEmail;
+    document.getElementById('viewStudentFirstName').textContent = row.dataset.firstName || 'N/A';
+    document.getElementById('viewStudentMiddleName').textContent = row.dataset.middleName || 'N/A';
+    document.getElementById('viewStudentSurname').textContent = row.dataset.surname || 'N/A';
+    document.getElementById('viewStudentSuffix').textContent = row.dataset.suffix || 'N/A';
+    document.getElementById('viewStudentGender').textContent = row.dataset.gender || 'N/A';
+    document.getElementById('viewStudentContactNum').textContent = row.dataset.contactNum || 'N/A';
+
+    // Open modal
+    openModal('viewStudentModal');
 };
 
 // Function to update status in view modal
@@ -270,13 +299,22 @@ window.changePasswordModal = function() {
     openModal('changePasswordModal');
 };
 
+window.openChangePasswordModal = function(studentEmail) {
+    if (!studentEmail) {
+        showNotification('Student email not found', 'error');
+        return;
+    }
+    document.getElementById('changePasswordStudentEmail').value = studentEmail;
+    openModal('changePasswordModal');
+};
+
 // Initialize event listeners when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Initializing admin and student management system...');
-    
+
     // Initialize tables
     loadAdminTable();
-    
+
     if (document.getElementById('tab-box2')?.checked) {
         loadStudentData();
     }
@@ -301,7 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (addAdminForm) {
         addAdminForm.addEventListener('submit', async function(e) {
             e.preventDefault();
-            
+
             const formData = new FormData(this);
             const adminData = {};
             formData.forEach((value, key) => {
@@ -322,7 +360,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 const data = await response.json();
-                
+
                 if (!response.ok) {
                     if (response.status === 422) {
                         const errorMessages = Object.entries(data.errors)
@@ -337,67 +375,77 @@ document.addEventListener('DOMContentLoaded', () => {
                 showNotification('Admin added successfully!', 'success');
                 closeModal('addAdminModal');
                 this.reset();
-                
+
                 const genderSelect = document.getElementById('gender');
                 if (genderSelect) genderSelect.selectedIndex = 0;
-                
+
                 await loadAdminTable();
-                
+
             } catch (error) {
                 console.error('Error adding admin:', error);
                 showNotification(error.message || 'Failed to add admin. Please try again.', 'error');
             }
         });
     }
+    document.getElementById('changePasswordForm').addEventListener('submit', async function (e) {
+        e.preventDefault();
 
-    // Change Password Form Handler
-    const changePasswordForm = document.getElementById('changePasswordForm');
-    if (changePasswordForm) {
-        changePasswordForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const newPassword = document.getElementById('newPassword').value;
-            const confirmPassword = document.getElementById('confirmNewPassword').value;
-            
-            if (newPassword !== confirmPassword) {
-                showNotification('Passwords do not match!', 'error');
-                return;
+        const studentEmail = document.getElementById('changePasswordStudentEmail').value; // Hidden field with email
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmNewPassword').value;
+
+        if (newPassword !== confirmPassword) {
+            showNotification('Passwords do not match!', 'error');
+            return;
+        }
+
+        try {
+            const response = await fetch('/admin/change-student-password', {
+                method: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content,
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({ email: studentEmail, newPassword, confirmNewPassword: confirmPassword })
+            });
+
+            const data = await response.json();
+
+            if (!response.ok || !data.success) {
+                throw new Error(data.message || 'Failed to update password.');
             }
-            
-            const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}$/;
-            if (!passwordRegex.test(newPassword)) {
-                showNotification('Password must meet all requirements!', 'error');
-                return;
-            }
-            
-            closeModal('changePasswordModal');
-            this.reset();
+
             showNotification('Password changed successfully!', 'success');
-        });
-    }
-});
+            closeModal('changePasswordModal');
 
+        } catch (error) {
+            console.error('Error changing password:', error);
+            showNotification(error.message || 'Failed to change password.', 'error');
+        }
+    });
+});
 // Add CSS styles
 const style = document.createElement('style');
 style.textContent = `
     .status-select.active {
         background-color: #22c55e;
     }
-    
+
     .status-select.inactive {
         background-color: #ef4444;
     }
-    
+
     .status-select:disabled {
         opacity: 0.7;
         cursor: not-allowed;
     }
-    
+
     @keyframes fadeIn {
         from { opacity: 0; transform: translateY(-10px); }
         to { opacity: 1; transform: translateY(0); }
     }
-    
+
     .notification {
         animation: fadeIn 0.3s ease-out;
     }

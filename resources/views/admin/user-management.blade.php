@@ -2,12 +2,12 @@
 <html lang="en">
 
 <head>
-    <meta name="csrf-token" content="{{ csrf_token() }}">    
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible"
           content="IE=edge">
-    <meta name="viewport" 
-          content="width=device-width, 
+    <meta name="viewport"
+          content="width=device-width,
                    initial-scale=1.0">
     <title>UNIARCHIVE - User Management</title>
     <link rel="stylesheet" href="{{ asset('css/ADMIN-UserMgmt2.css') }}">
@@ -22,14 +22,14 @@
 </head>
 
 <body>
-  
+
     <!-- for header part -->
     <header>
         <div class="logosec">
             <div class="logo">UNIARCHIVE</div>
             <img src= "{{ asset('assets/01-menu.png') }}"
-                class="icn menuicn" 
-                id="menuicn" 
+                class="icn menuicn"
+                id="menuicn"
                 alt="menu-icon">
         </div>
 
@@ -39,7 +39,7 @@
 
             <div class="dropdown">
                 <img src= "{{ asset('assets/03-user.png') }}"
-                    class="dpicn" 
+                    class="dpicn"
                     alt="dp">
               <div class="dropdown-content">
                   <a href="{{ route('admin.profile') }}">Edit Account</a>
@@ -84,7 +84,7 @@
 
                         <div class="option2 nav-option">
                             <img src= "{{ asset('assets/05-user management.png') }}"
-                                class="nav-img" 
+                                class="nav-img"
                                 alt="usermgmt">
                             <h3>
                                 User Management
@@ -121,12 +121,12 @@
                                 // Submit the logout form
                                 document.getElementById('logout-form').submit();
                             });
-                        </script>        
+                        </script>
 
                 </nav>
             </div>
 
-            <!----BODY CONTENT PAGE-----> 
+            <!----BODY CONTENT PAGE----->
             <div class="main">
                 <div class="dashboard-title">
                     USER MANAGEMENT
@@ -135,10 +135,10 @@
                         <span id="current-time"></span>
                     </div>
                 </div>
-            
+
                 <div class="wrapper">
                     <div class="tab-box">
-                    <input checked="checked" id="tab-box1" name="tab-box" type="radio"> 
+                    <input checked="checked" id="tab-box1" name="tab-box" type="radio">
                     <label for="tab-box1" class="label-one">ADMIN</label>
                     <div class="content">
                         <div class="main-content">
@@ -147,7 +147,7 @@
                                     <h1 class="title-Header">Administrators</h1>
                                     <button class="add-admin-btn" id="addAdminBtn">ADD USER ADMIN</button>
                                 </div>
-                                                    
+
                                 <table class="inventory-table" id="bookTable">
                                     <thead>
                                         <tr>
@@ -165,9 +165,9 @@
                                 </table>
                             </div>
                         </div>
-                    </div> 
+                    </div>
 
-                    <input id="tab-box2" name="tab-box" type="radio"> 
+                    <input id="tab-box2" name="tab-box" type="radio">
                     <label for="tab-box2" class="label-two">STUDENTS</label>
                     <div class="content">
                         <div class="main-content">
@@ -175,7 +175,7 @@
                                 <div class="report-header">
                                     <h1 class="title-Header">Student Users</h1>
                                 </div>
-                                                    
+
                                 <table class="inventory-table" id="studentTable">
                                     <thead>
                                         <tr>
@@ -194,7 +194,7 @@
                     </div>
                 </div>
             </div>
-        </div>  
+        </div>
 
         <!---------- Add ADMIN Modal ------------->
         <div id="addAdminModal" class="modal-background fixed inset-0 flex justify-center items-center" style="display: none;">
@@ -315,7 +315,7 @@
                     </div>
                     <div class="mb-4">
                         <p class="text-sm font-medium text-gray-500">Status</p>
-                        <p class="mt-1 text-base" id="viewStatus"></p>    
+                        <p class="mt-1 text-base" id="viewStatus"></p>
                     </div>
                 </div>
                 <div class="flex justify-center mt-6 pt-4 border-t">
@@ -334,72 +334,73 @@
                 <div class="space-y-4">
                     <div class="mb-4">
                         <p class="text-sm font-medium text-gray-500">School ID</p>
-                        <p class="mt-1 text-base" id="viewStudentID">0001</p>
+                        <p class="mt-1 text-base" id="viewStudentID"></p>
                     </div>
                     <div class="mb-4">
                         <p class="text-sm font-medium text-gray-500">Email</p>
-                        <p class="mt-1 text-base" id="viewStudentEmail">sample@email.com</p>
+                        <p class="mt-1 text-base" id="viewStudentEmail"></p>
                     </div>
                     <div class="mb-4">
                         <p class="text-sm font-medium text-gray-500">First Name</p>
-                        <p class="mt-1 text-base" id="viewStudentFirstName">Jane</p>
+                        <p class="mt-1 text-base" id="viewStudentFirstName"></p>
                     </div>
                     <div class="mb-4">
                         <p class="text-sm font-medium text-gray-500">Middle Name</p>
-                        <p class="mt-1 text-base" id="viewStudentMiddleName">Doe</p>
+                        <p class="mt-1 text-base" id="viewStudentMiddleName"></p>
                     </div>
                     <div class="mb-4">
                         <p class="text-sm font-medium text-gray-500">Surname</p>
-                        <p class="mt-1 text-base" id="viewStudentSurname">Smith</p>
+                        <p class="mt-1 text-base" id="viewStudentSurname"></p>
                     </div>
                     <div class="mb-4">
                         <p class="text-sm font-medium text-gray-500">Suffix</p>
-                        <p class="mt-1 text-base" id="viewStudentSuffix">N/A</p>
+                        <p class="mt-1 text-base" id="viewStudentSuffix"></p>
                     </div>
                     <div class="mb-4">
                         <p class="text-sm font-medium text-gray-500">Gender</p>
-                        <p class="mt-1 text-base" id="viewStudentGender">Female</p>
+                        <p class="mt-1 text-base" id="viewStudentGender"></p>
                     </div>
                     <div class="mb-4">
                         <p class="text-sm font-medium text-gray-500">Contact Number</p>
-                        <p class="mt-1 text-base" id="viewStudentContactNum">09123456789</p>
+                        <p class="mt-1 text-base" id="viewStudentContactNum"></p>
                     </div>
                 </div>
                 <div class="flex justify-center gap-4 mt-6 pt-4 border-t">
-                    <button type="button" class="bg-gray-500 hover:bg-red-400 text-white px-4 py-2 rounded-md" onclick="changePasswordModal()">Change Password</button>
+                    <button type="button" class="bg-gray-500 hover:bg-red-400 text-white px-4 py-2 rounded-md" onclick="openChangePasswordModal('')">Change Password</button>
                     <button type="button" class="bg-indigo-600 hover:bg-green-500 text-white px-4 py-2 rounded-md" onclick="closeModal('viewStudentModal')">OKAY</button>
                 </div>
             </div>
         </div>
 
-        <!---------- Student Change Password Modal ------------->
+        <!---------- Student Change Password Modal ------------>
         <div id="changePasswordModal" class="modal-background flex justify-center items-center h-screen" style="display: none;">
             <div class="modal-content bg-white p-6 rounded-lg shadow-lg max-w-xl w-full">
                 <div class="flex justify-between items-center mb-4 border-b pb-2">
-                    <h2 class="text-xl font-semibold">Change Password</h2>
+                    <h2 class="text-xl font-semibold">Change Student Password</h2>
                     <button class="text-gray-500 hover:text-gray-700 text-3xl p-2" onclick="closeModal('changePasswordModal')">&times;</button>
                 </div>
                 <form id="changePasswordForm">
+                    <input type="hidden" id="changePasswordStudentEmail"> <!-- Hidden field to store student email -->
                     <div class="space-y-4">
                         <div class="mb-4">
                             <label for="newPassword" class="block text-sm font-medium text-gray-500">Enter New Password</label>
-                            <input type="password" 
-                                id="newPassword" 
-                                class="text-field mt-1 block w-full rounded-md shadow-sm" 
-                                required 
-                                minlength="8" 
-                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}" 
+                            <input type="password"
+                                id="newPassword"
+                                class="text-field mt-1 block w-full rounded-md shadow-sm"
+                                required
+                                minlength="8"
+                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}"
                                 title="Password must be at least 8 characters long and include at least one number, one lowercase letter, one uppercase letter, and one special character."
                             >
                         </div>
                         <div class="mb-4">
                             <label for="confirmNewPassword" class="block text-sm font-medium text-gray-500">Confirm New Password</label>
-                            <input type="password" 
-                                id="confirmNewPassword" 
-                                class="text-field mt-1 block w-full rounded-md shadow-sm" 
-                                required 
-                                minlength="8" 
-                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}" 
+                            <input type="password"
+                                id="confirmNewPassword"
+                                class="text-field mt-1 block w-full rounded-md shadow-sm"
+                                required
+                                minlength="8"
+                                pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*\W).{8,}"
                                 title="Password must match the requirements above"
                             >
                         </div>
