@@ -550,6 +550,16 @@ form button:nth-of-type(2):hover {
     box-sizing: border-box;
   }
 
+  .input-field1 {
+    width: 100%;
+    padding: 10px 40px 10px 15px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f5f5f5; /* Read-only input background */
+    box-sizing: border-box;
+  }
+
   /* Icon Styling */
   .input-box i {
     position: absolute;

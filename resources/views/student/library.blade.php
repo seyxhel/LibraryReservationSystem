@@ -641,15 +641,15 @@ function closeDetails() {
     @csrf
     <div class="input-box">
         <label for="current-password">Current Password:</label>
-        <input type="password" class="input-field" id="current-password" name="current_password" placeholder="Enter Current Password" required>
+        <input type="password" class="input-field1" id="current-password" name="current_password" placeholder="Enter Current Password" required>
     </div>
     <div class="input-box">
         <label for="new-password">New Password:</label>
-        <input type="password" class="input-field" id="new-password" name="new_password" placeholder="Enter New Password" required>
+        <input type="password" class="input-field1" id="new-password" name="new_password" placeholder="Enter New Password" required>
     </div>
     <div class="input-box">
         <label for="confirm-new-password">Confirm New Password:</label>
-        <input type="password" class="input-field" id="confirm-new-password" name="new_password_confirmation" placeholder="Confirm New Password" required>
+        <input type="password" class="input-field1" id="confirm-new-password" name="new_password_confirmation" placeholder="Confirm New Password" required>
     </div>
 
     <div class="button-group">

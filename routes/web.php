@@ -129,10 +129,6 @@ Route::get('/reports', function () {
     return view('admin.report-page');
 })->name('reports.page');
 
-Route::get('/reservation-handling', function () {
-    return view('admin.reservation-handling');
-})->name('reservation-handling.page');
-
 Route::get('/book-inventory', function () {
     return view('admin.book-inventory');
 })->name('book-inventory.page');
@@ -200,31 +196,22 @@ Route::get('/admin/reservation-report', [ReservationController::class, 'getReser
     ->name('admin.reservation.report')
     ->middleware('auth:admin');
 
-Route::middleware(['auth:admin'])->prefix('admin')->group(function () {
-        // Reservation handling routes
-    Route::get('/admin/reservations', [AdminReservationController::class, 'index'])
-            ->name('admin.reservations.index');
+Route::get('/reservation-handling', function () {return view('admin.reservation-handling');})->name('reservation-handling.page');
 
-    Route::post('/reservations/{id}/confirm', [AdminReservationController::class, 'confirmReservation'])
-            ->name('admin.reservations.confirm')
-            ->where('id', '[0-9]+');
-
-    Route::post('/reservations/{id}/cancel', [AdminReservationController::class, 'cancelReservation'])
-            ->name('admin.reservations.cancel')
-            ->where('id', '[0-9]+');
-
-    Route::delete('/reservations/{id}', [AdminReservationController::class, 'deleteReservation'])
-            ->name('admin.reservations.delete')
-            ->where('id', '[0-9]+');
-
-    Route::get('/reservations/filtered', [AdminReservationController::class, 'getFilteredReservations'])
-            ->name('admin.reservations.filtered');
-
-    Route::post('/reservations/{id}/return', [AdminReservationController::class, 'returnBook'])
-            ->name('admin.reservations.return');
-
-    Route::post('/reservations/{id}/overtime', [AdminReservationController::class, 'markOvertime'])
-            ->name('admin.reservations.overtime');
+// Replace the simple view route with a controller route
+Route::middleware(['auth:admin'])->group(function () {
+    Route::get('/admin/reservation-handling', [AdminReservationController::class, 'index'])
+        ->name('admin.reservation-handling');
+        
+    // Other reservation routes - fixed nesting
+    Route::post('/admin/reservations/{id}/confirm', [AdminReservationController::class, 'confirmReservation'])
+        ->name('admin.reservations.confirm');
+    Route::post('/admin/reservations/{id}/cancel', [AdminReservationController::class, 'cancelReservation'])
+        ->name('admin.reservations.cancel');
+    Route::post('/admin/reservations/{id}/return', [AdminReservationController::class, 'returnBook'])
+        ->name('admin.reservations.return');
+    Route::delete('/admin/reservations/{id}', [AdminReservationController::class, 'deleteReservation'])
+        ->name('admin.reservations.delete');
 });
 
 Route::get('/admin/check-session', 'AdminController@checkSession')->name('admin.check-session');
